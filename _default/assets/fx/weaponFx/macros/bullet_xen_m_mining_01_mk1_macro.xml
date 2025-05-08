@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Exported by: Alexei (192.168.3.58) at 08.11.2019_12-35-17-->
+<macros>
+  <macro name="bullet_xen_m_mining_01_mk1_macro" class="bullet">
+    <component ref="bullet_xen_m_mining_01_mk1" />
+    <properties>
+      <bullet speed="7000" lifetime="4" range="3960" amount="1" barrelamount="1" icon="weapon_mining_mk1" maxhits="1" ricochet="0" scale="1" attach="1" />
+      <reload time="4" />
+      <damage value="2" repair="0">
+        <multiplier mining="300" />
+      </damage>
+      <effects>
+        <activation ref="muzzle_xen_m_mining_01_mk1" />
+        <impact ref="impact_xen_m_mining_01_mk1" inside="impact_xen_m_mining_01_mk1_inside" />
+        <bigobjectimpact ref="impact_xen_m_mining_01_mk1_bigobject" inside="impact_xen_m_mining_01_mk1_bigobject_inside" />
+      </effects>
+      <weapon system="weapon_mining" />
+    </properties>
+  </macro>
+</macros>

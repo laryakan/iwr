@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Exported by: Matthias (192.168.3.66) on 2022-08-12 16:07:36-->
+<macros>
+  <macro name="bullet_ter_m_beam_01_mk1_macro" class="bullet">
+    <component ref="bullet_ter_m_beam_01_mk1" />
+    <properties>
+      <bullet speed="2.997925e+08" lifetime="1.75" range="6800" amount="1" barrelamount="1" icon="weapon_beam_mk1" maxhits="3" ricochet="0" scale="1" attach="1">
+        <damagecurves>
+          <distance>
+            <point position="0" value="1" />
+            <point position="0.6" value="1" />
+            <point position="1" value="0.1" />
+          </distance>
+        </damagecurves>
+      </bullet>
+      <heat initial="6500" value="2000" />
+      <reload time="2.05" />
+      <damage value="3590" repair="0" />
+      <effects>
+        <impact ref="impact_gen_m_beam_01_mk1" inside="impact_gen_m_beam_01_mk1_inside" />
+        <bigobjectimpact ref="impact_gen_m_beam_01_mk1_bigobject" inside="impact_gen_m_beam_01_mk1_bigobject_inside" />
+      </effects>
+      <sounds>
+        <firing ref="weapon_ter_m_beam_loop" />
+      </sounds>
+      <weapon system="weapon_standard" />
+    </properties>
+  </macro>
+</macros>

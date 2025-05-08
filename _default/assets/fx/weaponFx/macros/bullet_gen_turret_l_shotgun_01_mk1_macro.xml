@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Exported by: 192.168.3.56 (192.168.3.56) at 14.01.2020_10-15-15-->
+<macros>
+  <macro name="bullet_gen_turret_l_shotgun_01_mk1_macro" class="bullet">
+    <component ref="bullet_gen_m_shotgun_01_mk1" />
+    <properties>
+      <bullet speed="1804" lifetime="2.698" amount="12" barrelamount="2" icon="weapon_shotgun_mk1" timediff="0.002" angle="1.25" maxhits="3" ricochet="0.5" restitution="1" scale="0" attach="0" />
+      <reload time="4.9" />
+      <damage value="192" repair="0" />
+      <effects>
+        <impact ref="impact_gen_m_shotgun_01_mk1" inside="impact_gen_m_shotgun_01_mk1_inside" />
+        <bigobjectimpact ref="impact_gen_m_shotgun_01_mk1_bigobject" inside="impact_gen_m_shotgun_01_mk1_bigobject_inside" />
+        <launch ref="muzzle_turret_gen_m_shotgun_01_mk1" />
+      </effects>
+      <weapon system="turret_shortrange" />
+    </properties>
+  </macro>
+</macros>

@@ -1,0 +1,38 @@
+Project Notes "Increased Weapon Ranges" (IWR)
+===
+
+In games files, the range is affected by the <bullet> properties / attributes 
+its not the weapons but the projectile that affect the range, by it's speed and/or lifetime
+Files are located in :
+assets/fx/weaponFx/macros/*.xml
+and
+extensions/*/assets/fx/weaponFx/macros/*.xml
+
+Missiles/torpedos are exceptions, stored in, their range is affected by the engine which trust them
+their engine properties are stored in
+assets/props/Engines/macros/engine_missile_*_*_macro.xml
+which is a better alternative than affect the missile lifetime, because the pilot skill impact on avoidance will be impeded
+
+all these files have been backup in the folder _default in the mod
+the May 8th 2025 for DLC Split Vendetta, Cradle of Humanity, Timelines, Kingdom's End and Tides of Avarice (not Hyperion, because I don't have it)
+
+In the base game, at the time (version 7.50, May 8th 2025) there are in 
+	01.cat
+	05.cat
+	07.cat
+
+In the case of DLC
+Split Vendetta
+	extensions\ego_dlc_split\ext_01.cat
+Cradle of Humanity
+	extensions\ego_dlc_terran\ext_01.cat
+Timelines
+	extensions\ego_dlc_timelines\ext_01.cat
+Kingdom's End
+	extensions\ego_dlc_boron\ext_01.cat
+Tides of Avarice
+	extensions\ego_dlc_pirate\ext_01.cat
+	
+All existing weapons of the base game has their range (bullet speed or lifetime in case of beams) increased, in some case their spread has been reduced
+
+Vanilla files have been extracted using XTools_1.11

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Exported by: Volodymyr (192.168.3.69) on 2024-04-08 12:16:26-->
+<macros>
+  <macro name="bullet_xen_turret_l_plasma_01_mk1_story_macro" class="bullet" alias="bullet_xen_turret_l_plasma_01_mk1_macro" ref="bullet_xen_turret_l_plasma_01_mk1_macro">
+    <component ref="bullet_xen_l_plasma_01_mk1" />
+    <properties>
+      <bullet speed="900" lifetime="4" scale="0" attach="0" selfdestructmintime="2" />
+      <areadamage value="500" />
+      <damage value="2100" repair="0" />
+      <effects>
+        <impact ref="impact_xen_l_plasma_01_mk1" inside="impact_xen_l_plasma_01_mk1_inside" />
+        <bigobjectimpact ref="impact_xen_l_plasma_01_mk1_bigobject" inside="impact_xen_l_plasma_01_mk1_bigobject_inside" />
+        <launch ref="muzzle_xen_l_plasma_01_mk1" />
+      </effects>
+    </properties>
+  </macro>
+</macros>

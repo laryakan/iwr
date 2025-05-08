@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Exported by: Alexei (192.168.3.58) at 08.11.2019_12-35-16-->
+<macros>
+  <macro name="bullet_xen_s_laser_01_mk1_macro" class="bullet">
+    <component ref="bullet_xen_s_laser_01_mk1" />
+    <properties>
+      <ammunition value="7" reload="0.65" />
+      <bullet speed="2880" lifetime="1.25" amount="1" barrelamount="1" icon="weapon_laser_mk1" timediff="0.025" angle="0.2" maxhits="1" ricochet="0" scale="0" attach="0" />
+      <heat value="54" />
+      <reload rate="13" />
+      <damage min="16" max="24" value="18" repair="0" />
+      <effects>
+        <impact ref="impact_xen_s_laser_01_mk1" inside="impact_xen_s_laser_01_mk1_inside" />
+        <bigobjectimpact ref="impact_xen_s_laser_01_mk1_bigobject" inside="impact_xen_s_laser_01_mk1_bigobject_inside" />
+        <launch ref="muzzle_xen_s_laser_01_mk1" />
+      </effects>
+      <weapon system="weapon_standard" />
+    </properties>
+  </macro>
+</macros>

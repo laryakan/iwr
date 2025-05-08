@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Exported by: nick (192.168.3.124) at 16.01.2020_17-16-19-->
+<macros>
+  <macro name="bullet_gen_m_gatling_01_mk1_macro" class="bullet">
+    <component ref="bullet_gen_m_gatling_01_mk1" />
+    <properties>
+      <ammunition value="21" reload="1" />
+      <bullet speed="1920" lifetime="2.5" amount="1" barrelamount="1" icon="weapon_gatling_mk1" timediff="0.02" angle="0.34" maxhits="2" ricochet="0.01" restitution="0.3" scale="0" attach="0" />
+      <heat value="75" />
+      <reload rate="8" />
+      <damage value="33" repair="0" />
+      <effects>
+        <impact ref="impact_gen_m_gatling_01_mk1" inside="impact_gen_m_gatling_01_mk1_inside" />
+        <bigobjectimpact ref="impact_gen_m_gatling_01_mk1_bigobject" inside="impact_gen_m_gatling_01_mk1_bigobject_inside" />
+        <launch ref="muzzle_gen_m_gatling_01_mk1" />
+      </effects>
+      <weapon system="weapon_standard" />
+    </properties>
+  </macro>
+</macros>

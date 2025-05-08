@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Exported by: nick (192.168.3.73) at 24.03.2020_16-59-26-->
+<macros>
+  <macro name="bullet_spl_m_sticky_01_mk2_macro" class="bullet">
+    <component ref="bullet_spl_m_sticky_01_mk2" />
+    <properties>
+      <ammunition value="7" reload="0.9" />
+      <bullet speed="1901" lifetime="2.182" amount="1" barrelamount="1" icon="weapon_sticky_mk2" timediff="0.017" angle="0.69" maxhits="1" ricochet="0" scale="0" attach="0" sticktime="3" />
+      <heat value="80" />
+      <reload rate="7" />
+      <damage value="76" hull="14" repair="0" />
+      <effects>
+        <impact ref="impact_gen_m_laser_01_mk1" inside="impact_gen_m_laser_01_mk1_inside" />
+        <bigobjectimpact ref="impact_gen_m_laser_01_mk1_bigobject" inside="impact_gen_m_laser_01_mk1_bigobject_inside" />
+        <launch ref="muzzle_gen_s_laser_01_mk1" />
+      </effects>
+      <weapon system="weapon_standard" />
+    </properties>
+  </macro>
+</macros>

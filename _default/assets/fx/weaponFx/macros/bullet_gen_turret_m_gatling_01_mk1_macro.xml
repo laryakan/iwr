@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Exported by: nick (192.168.3.123) at 27.01.2020_11-51-16-->
+<macros>
+  <macro name="bullet_gen_turret_m_gatling_01_mk1_macro" class="bullet">
+    <component ref="bullet_gen_s_gatling_01_mk1" />
+    <properties>
+      <ammunition value="15" reload="1" />
+      <bullet speed="1074" lifetime="3.074" amount="1" barrelamount="2" icon="weapon_gatling_mk1" timediff="0.032" angle="0.54" maxhits="2" ricochet="0.01" restitution="0.3" scale="0" attach="0" />
+      <reload rate="10" />
+      <damage value="9" repair="0" />
+      <effects>
+        <impact ref="impact_gen_s_gatling_01_mk1" inside="impact_gen_s_gatling_01_mk1_inside" />
+        <bigobjectimpact ref="impact_gen_s_gatling_01_mk1_bigobject" inside="impact_gen_s_gatling_01_mk1_bigobject_inside" />
+        <launch ref="muzzle_turret_gen_m_gatling_01_mk1" />
+      </effects>
+      <weapon system="turret_shortrange" />
+    </properties>
+  </macro>
+</macros>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Exported by: nick (192.168.3.124) at 13.01.2020_18-26-20-->
+<macros>
+  <macro name="bullet_spl_s_shotgun_01_mk2_macro" class="bullet">
+    <component ref="bullet_spl_s_shotgun_01_mk2" />
+    <properties>
+      <bullet speed="3110" lifetime="0.667" amount="3" barrelamount="1" icon="weapon_shotgun_mk2" timediff="0.005" angle="1" maxhits="3" ricochet="0.5" restitution="0.5" scale="0" attach="0" />
+      <heat value="128" />
+      <reload rate="3.5" />
+      <damage value="50" repair="0" />
+      <effects>
+        <impact ref="impact_gen_s_shotgun_01_mk1" inside="impact_gen_s_shotgun_01_mk1_inside" />
+        <bigobjectimpact ref="impact_gen_s_shotgun_01_mk1_bigobject" inside="impact_gen_s_shotgun_01_mk1_bigobject_inside" />
+        <launch ref="muzzle_gen_s_shotgun_01_mk1" />
+      </effects>
+      <weapon system="weapon_standard" />
+    </properties>
+  </macro>
+</macros>

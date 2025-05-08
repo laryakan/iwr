@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Exported by: Alexei (192.168.3.58) at 08.11.2019_12-31-31-->
+<macros>
+  <macro name="bullet_arg_s_ion_01_mk2_macro" class="bullet">
+    <component ref="bullet_arg_s_ion_01_mk2" />
+    <properties>
+      <bullet speed="1920" lifetime="1.5" amount="1" barrelamount="1" icon="weapon_ion_mk2" timediff="0.017" angle="0.06" maxhits="1" ricochet="0" scale="0" attach="0" />
+      <heat value="151" />
+      <reload rate="4" />
+      <damage value="8" shield="256" repair="0" />
+      <effects>
+        <impact ref="impact_arg_s_ion_01_mk1" />
+        <bigobjectimpact ref="impact_arg_s_ion_01_mk1_bigobject" inside="impact_arg_s_ion_01_mk1_bigobject_inside" />
+        <launch ref="muzzle_arg_s_ion_01_mk1" />
+      </effects>
+      <weapon system="weapon_standard" />
+    </properties>
+  </macro>
+</macros>
