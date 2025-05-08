@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Exported by: Matthias (192.168.3.104) at 21.11.2018_12-58-17-->
+<macros>
+  <macro name="missile_guided_light_mk1_macro" class="missile">
+    <component ref="missile_guided_light_mk1" />
+    <properties>
+      <identification name="{20105,6044}" basename="{20105,6041}" description="{20105,6042}" />
+      <ammunition value="1" />
+      <missile amount="1" barrelamount="1" lifetime="10" range="5000" guided="1" icon="missile_guided_mk1" retarget="0" tags="guided" />
+      <explosiondamage value="1956" />
+      <reload time="2" />
+      <hull max="26" />
+      <effects>
+        <explosion ref="missile_explosion_light_01" />
+        <launch ref="missile_guided_muzzle" />
+      </effects>
+      <lock time="2" range="3500" />
+      <longrangescan minlevel="15" />
+      <weapon system="missile_guided" />
+      <countermeasure resilience="0.74" />
+      <physics mass="0.329">
+        <inertia pitch="0.223" yaw="0.223" roll="0.112" />
+        <drag forward="0.066" reverse="0.263" horizontal="0.472" vertical="0.472" pitch="0.265" yaw="0.265" roll="0.132" />
+      </physics>
+    </properties>
+    <connections>
+      <connection ref="con_engine01">
+        <macro ref="engine_missile_guided_mk1_macro" connection="ship" />
+      </connection>
+    </connections>
+  </macro>
+</macros>
