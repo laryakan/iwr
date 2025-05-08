@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Increased Weapon Ranges Generated  -->
 <diff>
   <replace sel="/macros/macro[@name='bullet_gen_m_laser_01_mk2_macro']/properties/bullet">
-          <bullet speed="9124.000000" lifetime="1.1" amount="1" barrelamount="1" icon="weapon_laser_mk2" timediff="0.015" angle="0.130000" maxhits="1" ricochet="0" scale="0" attach="0" />
+          <bullet speed="9634.944000" lifetime="1.1" amount="1" barrelamount="1" icon="weapon_laser_mk2" timediff="0.015" angle="0.123106" maxhits="1" ricochet="0" scale="0" attach="0" />
   </replace>
 </diff>

@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Increased Weapon Ranges Generated  -->
 <diff>
   <replace sel="/macros/macro[@name='engine_missile_dumbfire_mk1_macro']/properties/thrust">
           <thrust forward="105.248000" reverse="0" strafe="0" pitch="0" yaw="0" roll="0" />

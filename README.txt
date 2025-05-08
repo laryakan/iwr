@@ -10,6 +10,8 @@ Rules applied by default affects :
 
 It also affect Missiles/Torpedoes Speed by modifying their engines.
 
+Space Suit Laser (Gun and Repair) are excluded because you will not shoot very far in EVA anyway.
+
 This mod have been develop to be use in cunjuction with mod increasing X4: Foundations default space and ship speed, like XRSGE (https://www.nexusmods.com/x4foundations/mods/1140) and REM HYPERDRIVE (https://www.nexusmods.com/x4foundations/mods/1572).
 Used with REM INERTIAL MOD (https://www.nexusmods.com/x4foundations/mods/1328), it is a Vanilla alternative to REM OVERHAUL (https://www.nexusmods.com/x4foundations/mods/848) which affect a lot more things than just weapon ranges and ship physics.
 

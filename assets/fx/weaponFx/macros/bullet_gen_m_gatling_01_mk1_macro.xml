@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Increased Weapon Ranges Generated  -->
 <diff>
   <replace sel="/macros/macro[@name='bullet_gen_m_gatling_01_mk1_macro']/properties/bullet">
-          <bullet speed="3840.000000" lifetime="2.5" amount="1" barrelamount="1" icon="weapon_gatling_mk1" timediff="0.02" angle="0.170000" maxhits="2" ricochet="0.01" restitution="0.3" scale="0" attach="0" />
+          <bullet speed="3966.720000" lifetime="2.5" amount="1" barrelamount="1" icon="weapon_gatling_mk1" timediff="0.02" angle="0.164569" maxhits="2" ricochet="0.01" restitution="0.3" scale="0" attach="0" />
   </replace>
 </diff>

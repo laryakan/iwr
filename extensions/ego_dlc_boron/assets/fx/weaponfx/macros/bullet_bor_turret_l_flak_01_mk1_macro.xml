@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Increased Weapon Ranges Generated  -->
 <diff>
   <replace sel="/macros/macro[@name='bullet_bor_turret_l_flak_01_mk1_macro']/properties/bullet">
-          <bullet speed="9320.000000" lifetime="1.25" barrelamount="1" icon="weapon_bor_flak_mk1" timediff="0.001" angle="1.050000" maxhits="1" ricochet="0" restitution="1" scale="0" attach="0" selfdestruct="1" plannedselfdestruct="1" selfdestructtimediff="0.06" selfdestructmintime="0.15" influencelist="light_drive_disrupt_flak" />
+          <bullet speed="9627.560000" lifetime="1.25" barrelamount="1" icon="weapon_bor_flak_mk1" timediff="0.001" angle="1.016457" maxhits="1" ricochet="0" restitution="1" scale="0" attach="0" selfdestruct="1" plannedselfdestruct="1" selfdestructtimediff="0.06" selfdestructmintime="0.15" influencelist="light_drive_disrupt_flak" />
   </replace>
 </diff>
