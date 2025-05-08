@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Exported by: nick (192.168.3.61) on 2024-11-22 10:47:26-->
+<macros>
+  <macro name="bullet_xen_turret_l_laser_01_mk1_scenario_macro" class="bullet">
+    <component ref="bullet_xen_l_laser_01_mk1" />
+    <properties>
+      <bullet speed="1958" lifetime="2.647" amount="1" barrelamount="2" icon="weapon_laser_mk1" timediff="0.025" angle="1" maxhits="1" ricochet="0" scale="0" attach="0" />
+      <reload time="3" />
+      <damage value="3229" repair="0" />
+      <weapon system="turret_longrange" />
+    </properties>
+  </macro>
+</macros>

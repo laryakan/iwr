@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Exported by: Lino (192.168.3.143) at 19.12.2019_13-45-55-->
+<macros>
+  <macro name="bullet_par_turret_l_mining_01_mk1_macro" class="bullet">
+    <component ref="bullet_par_l_mining_01_mk1" />
+    <properties>
+      <bullet speed="7000" lifetime="4" range="7000" amount="1" barrelamount="1" icon="weapon_mining_mk1" maxhits="1" ricochet="0" scale="1" attach="1" />
+      <reload time="4" />
+      <damage value="2" hull="1" delay="1" repair="0">
+        <multiplier mining="450" />
+      </damage>
+      <effects>
+        <impact ref="impact_gen_l_mining_01_mk1" inside="impact_gen_l_mining_01_mk1_inside" />
+        <bigobjectimpact ref="impact_gen_l_mining_01_mk1_bigobject" inside="impact_gen_l_mining_01_mk1_bigobject_inside" />
+        <launch ref="muzzle_gen_l_mining_01_mk1" />
+      </effects>
+      <weapon system="weapon_mining" />
+    </properties>
+  </macro>
+</macros>

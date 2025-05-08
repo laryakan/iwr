@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Exported by: nick (192.168.3.123) at 27.01.2020_11-51-21-->
+<macros>
+  <macro name="bullet_gen_turret_m_laser_01_mk1_macro" class="bullet">
+    <component ref="bullet_gen_s_laser_01_mk1" />
+    <properties>
+      <ammunition value="3" reload="0.5" />
+      <bullet speed="1855" lifetime="1.844" amount="1" barrelamount="2" icon="weapon_laser_mk1" timediff="0.019" angle="0.32" maxhits="1" ricochet="0" scale="0" attach="0" />
+      <reload rate="6" />
+      <damage value="12" repair="0" />
+      <effects>
+        <impact ref="impact_gen_s_laser_01_mk1" inside="impact_gen_s_laser_01_mk1_inside" />
+        <bigobjectimpact ref="impact_gen_s_laser_01_mk1_bigobject" inside="impact_gen_s_laser_01_mk1_bigobject_inside" />
+        <launch ref="muzzle_turret_gen_m_laser_01_mk1" />
+      </effects>
+      <weapon system="turret_midrange" />
+    </properties>
+  </macro>
+</macros>

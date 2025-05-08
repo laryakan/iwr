@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Exported by: nick (192.168.3.65) at 11.11.2021_01-22-17-->
+<macros>
+  <macro name="bullet_tel_l_laser_01_mk1_macro" class="bullet">
+    <component ref="bullet_tel_l_laser_01_mk1" />
+    <properties>
+      <bullet speed="1659" lifetime="6.3" amount="1" barrelamount="1" icon="weapon_laser_mk1" timediff="0.002" angle="0.03" maxhits="1" ricochet="0" scale="0" attach="0" />
+      <heat value="475" />
+      <reload rate="1.44" />
+      <damage value="1169" repair="0" />
+      <effects>
+        <impact ref="impact_gen_l_laser_01_mk1" />
+        <bigobjectimpact ref="impact_gen_l_laser_01_mk1_bigobject" inside="impact_gen_l_laser_01_mk1_bigobject_inside" />
+        <launch ref="muzzle_gen_l_laser_01_mk1" />
+      </effects>
+      <weapon system="weapon_standard" />
+    </properties>
+  </macro>
+</macros>
