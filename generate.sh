@@ -48,7 +48,6 @@ fi
 
 echo -e "Applying factor $factor...\n\n"
 COUNT=0
-echo -e "Done : $COUNT/$TOTALFILES"
 # loop over files
 for FILE in "${FINDFILES[@]}"
 do
@@ -56,8 +55,9 @@ do
 
 	MACRO=$(grep -oP '<macro name="\K[^"]+' "$FILE")
 	BULLET_LINE=$(grep '<bullet ' "$FILE")
+	TRUST_LINE=$(grep '<thrust ' "$FILE")
 
-	if [[ -z "$MACRO" || -z "$BULLET_LINE" ]]; then
+	if [[ (-z "$MACRO" || -z "$BULLET_LINE") && (-z "$MACRO" || -z "$TRUST_LINE") ]]; then
 		echo ""
 		echo -e "$Red❌\tNo valid macro in file: $FILE$Color_Off"
 		continue
@@ -65,9 +65,9 @@ do
 
 	# Weapon type based on macro name
 	TYPE=""
-	[[ $MACRO =~ (gatling|plasma|laser|charge|cannon|shotgun|ion|flak|sticky|arc|swarm) ]] && TYPE="ballistic"
+	[[ $MACRO =~ (gatling|plasma|laser|charge|cannon|shotgun|ion|flak|sticky|arc|swarm|disruptor) ]] && TYPE="ballistic"
 	[[ $MACRO =~ railgun ]] && TYPE="railgun"
-	[[ $MACRO =~ (beam|mining|burst|missile|torpedo|nova|bio) ]] && TYPE="range_based"
+	[[ $MACRO =~ (beam|mining|burst|nova|bio) ]] && TYPE="range_based"
 	[[ $MACRO =~ engine ]] && TYPE="engine"
 
 	#DEBUG
@@ -81,6 +81,11 @@ do
 	# Getting value
 	get_attr() {
 		echo "$BULLET_LINE" | grep -oP "$1=\"\K[^\"]+"
+	}
+	
+	# Getting value for engine
+	get_attr_engine() {
+		echo "$TRUST_LINE" | grep -oP "$1=\"\K[^\"]+"
 	}
 
 	# Setting value
@@ -105,7 +110,8 @@ do
 		[[ $LIFE ]] && MODIFIED_ATTRS+=" lifetime=\"$(set_attr "$LIFE * $FACTOR")\""
 
 	elif [[ $TYPE == "engine" ]]; then
-		THRUST=$(grep -oP 'forward="\K[0-9.]+' "$FILE")
+		THRUST=$(get_attr_engine "forward")
+		#THRUST=$(grep -oP 'forward="\K[0-9.]+' "$FILE")
 		[[ $THRUST ]] && MODIFIED_ATTRS+=" forward=\"$(set_attr "$THRUST * $FACTOR")\""
 	fi
 
