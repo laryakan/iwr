@@ -296,6 +296,10 @@ do
 			[[ $DEBUG_VERY_VERBOSE_MODE -eq 1 ]] && echo -e "$Yellow ADJUSTED_FACTOR: "
 			[[ $DEBUG_VERY_VERBOSE_MODE -eq 1 ]] && echo "$ADJUSTED_FACTOR"
 			[[ $DEBUG_VERY_VERBOSE_MODE -eq 1 ]] && echo -e "$Color_Off"
+			
+			# In case that the angle factor is still the same as the original factor, we to a favor to the user and apply the mitigation to it... even if the angle will probably remain too low
+			[[ $(compare "$FACTOR == $ANGLE_FACTOR") -eq 1 ]] && ANGLE_FACTOR=$ADJUSTED_FACTOR
+			
 			MODIFIED_LINE="$BULLET_LINE"
 			[[ $SPEED ]] && \
 			MODIFIED_LINE=$(echo "$MODIFIED_LINE" | sed -E "s/(speed=\")$SPEED\"/\1$(set_attr "$SPEED * $ADJUSTED_FACTOR")\"/")
