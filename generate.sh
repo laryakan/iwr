@@ -152,9 +152,14 @@ do
 		awk "BEGIN { printf \"%.6f\", $1 }"
 	}
 	
+	# Setting value
+	calc() {
+		printf %.3f $(echo "$1" | bc -l)
+	}
+	
 	#Reset value from last time we passed here
 	unset SPEED
-	unset ANGL
+	unset ANGLE
 	unset RANGE
 	unset LIFE
 	unset THRUST
@@ -178,7 +183,6 @@ do
 	
 	# Recording METRICS
 	if [[ $TYPE == "ballistic" ||  $TYPE == "railgun" ]]; then
-		#$(echo "$SPEED * $METRICS_LIFE" | bc -l | tr -d '\r')
 		METRICS_RANGE=$(echo "$SPEED * $METRICS_LIFE" | bc -l | tr -d '\r')
 		if [[ $DEBUG_VERBOSE_MODE -eq 1 ]]; then
 			echo "	Vanilla RANGE : $METRICS_RANGE"
@@ -237,21 +241,24 @@ do
 		fi
 	else
 		if [[ ($TYPE != "engine") ]]; then
-			# Default adjusted factor for lesser range weapons
-			[[ $MK -eq 1 ]] && ADJUSTED_FACTOR=$(echo "$FACTOR + $MK1MITIGATOR " | bc -l | tr -d '\r')
-			[[ $MK -eq 2 ]] && ADJUSTED_FACTOR=$(echo "$FACTOR + $MK2MITIGATOR " | bc -l | tr -d '\r')
 			# Comparing medium to know if we let the mitigation increase the range or if we have to decrease it
 			if [[ $TYPE == "ballistic" ||  $TYPE == "railgun" ]]; then
 				METRICS_RANGE=$(echo "$SPEED * $METRICS_LIFE" | bc -l | tr -d '\r')
-				[[ $MK -eq 1 ]] && IS_LONGER=$(echo "$METRICS_RANGE > $MK1MEDIUM" | bc -l)
-				[[ $MK -eq 2 ]] && IS_LONGER=$(echo "$METRICS_RANGE > $MK2MEDIUM" | bc -l)
-				[[ $MK -eq 1 && $IS_LONGER -eq 1 ]] && ADJUSTED_FACTOR=$(echo "$FACTOR - $MK1MITIGATOR" | bc -l | tr -d '\r')
-				[[ $MK -eq 2 && $IS_LONGER -eq 1 ]] && ADJUSTED_FACTOR=$(echo "$FACTOR - $MK2MITIGATOR" | bc -l | tr -d '\r')
+				# Default adjusted factor for lesser range weapons
+				[[ $MK -eq 1 ]] && ADJUSTED_FACTOR=$(echo "$FACTOR * ( $MK1MEDIUM / $METRICS_RANGE ) * $MK1MITIGATOR " | bc -l | tr -d '\r')
+				[[ $MK -eq 2 ]] && ADJUSTED_FACTOR=$(echo "$FACTOR * ( $MK2MEDIUM / $METRICS_RANGE ) * $MK2MITIGATOR " | bc -l | tr -d '\r')
+				if [[ $DEBUG_VERBOSE_MODE -eq 1 ]]; then
+					NEW_RANGE=$(echo "$METRICS_RANGE * $ADJUSTED_FACTOR" | bc -l | tr -d '\r')
+					echo "	IWR RANGE : $NEW_RANGE"
+				fi
 			elif [[ $TYPE == "range_based" ]]; then
-				[[ $MK -eq 1 ]] && IS_LONGER=$(echo "$RANGE > $MK1MEDIUM" | bc -l)
-				[[ $MK -eq 2 ]] && IS_LONGER=$(echo "$RANGE > $MK2MEDIUM" | bc -l)
-				[[ $MK -eq 1 && $IS_LONGER -eq 1 ]] && ADJUSTED_FACTOR=$(echo "$FACTOR - $MK1MITIGATOR" | bc -l | tr -d '\r')
-				[[ $MK -eq 2 && $IS_LONGER -eq 1 ]] && ADJUSTED_FACTOR=$(echo "$FACTOR - $MK2MITIGATOR" | bc -l | tr -d '\r')
+
+				[[ $MK -eq 1 ]] && ADJUSTED_FACTOR=$(echo "$FACTOR * ( $MK1MEDIUM / $RANGE ) * $MK1MITIGATOR " | bc -l | tr -d '\r')
+				[[ $MK -eq 2 ]] && ADJUSTED_FACTOR=$(echo "$FACTOR * ( $MK1MEDIUM / $RANGE ) * $MK2MITIGATOR " | bc -l | tr -d '\r')
+				if [[ $RANGE && $DEBUG_VERBOSE_MODE -eq 1 ]]; then
+					NEW_RANGE=$(echo "$RANGE * $ADJUSTED_FACTOR" | bc -l | tr -d '\r')
+					echo "	IWR RANGE : $NEW_RANGE"
+				fi
 			fi
 			[[ $DEBUG_VERY_VERBOSE_MODE -eq 1 ]] && echo -e "$Yellow ADJUSTED_FACTOR: "
 			[[ $DEBUG_VERY_VERBOSE_MODE -eq 1 ]] && echo "$ADJUSTED_FACTOR" | bc -l | tr -d '\r'
@@ -264,7 +271,7 @@ do
 			## START POKE ERROR (standard_in) 1: syntax error
 			[[ ! -z "$ANGLE" ]] && WARNING_ANGLE=$(echo "$ANGLE / $ADJUSTED_FACTOR" | bc -l | tr -d '\r')
 			#[[ $POKE_MODE -eq 1 ]] && echo -e "$Red 267 : $ANGLE / $ADJUSTED_FACTOR $Color_Off"
-			[[ $DEBUG_MODE -eq 1 && $WARNING_ANGLE -eq 1 ]] && echo -e "$Red WARNING ! High Angle (Original: $ANGLE), file: $FILE $Color_Off"
+			[[ $DEBUG_MODE -eq 1 ]] && [[ $(echo "$WARNING_ANGLE > 1" | bc -l) ]] && echo -e "$Red WARNING ! High Angle (Original: \"$ANGLE\", New: \"$WARNING_ANGLE\"), file: $FILE $Color_Off"
 			## END POKE ERROR (standard_in) 1: syntax error
 			[[ $RANGE ]] && \
 			MODIFIED_LINE=$(echo "$MODIFIED_LINE" | sed -E "s/(range=\")$RANGE\"/\1$(set_attr "$RANGE * $ADJUSTED_FACTOR")\"/")

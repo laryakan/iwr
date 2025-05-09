@@ -20,5 +20,5 @@ You can, of course, use this mod without REM INERTIAL (https://www.nexusmods.com
 The mod is delivered with a bash script (usable on linux or bash alternative) capable of applying rules on files located in "_default" folder (by default, only Vanilla ones). Simply run ./generate.sh and prompt will ask you if you want to reset to default files before applying the factor it will ask you at the next prompt.
 
 GITHUB REPOSITORY : https://github.com/laryakan/iwr
-NEXUS MOD : ...tba...
+NEXUS MOD : https://www.nexusmods.com/x4foundations/mods/1691
 NEXUS USER : https://next.nexusmods.com/profile/Laryakan
