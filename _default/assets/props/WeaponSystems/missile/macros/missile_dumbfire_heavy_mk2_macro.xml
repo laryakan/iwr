@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Exported by: Matthias (192.168.3.104) at 21.11.2018_12-58-11-->
+<macros>
+  <macro name="missile_dumbfire_heavy_mk2_macro" class="missile">
+    <component ref="missile_dumbfire_heavy_mk2" />
+    <properties>
+      <identification name="{20105,6034}" basename="{20105,6031}" description="{20105,6032}" />
+      <ammunition value="1" />
+      <missile amount="1" barrelamount="1" lifetime="21.6" range="11000" guided="0" icon="missile_dumbfire_mk2" tags="dumbfire" />
+      <explosiondamage value="4320" />
+      <reload time="4.5" />
+      <hull max="65" />
+      <effects>
+        <explosion ref="missile_explosion_medium_01" />
+        <launch ref="missile_dumbfire_muzzle" />
+      </effects>
+      <weapon system="missile_dumbfire" />
+      <countermeasure resilience="1" />
+      <physics mass="0.68">
+        <inertia pitch="0.371" yaw="0.371" roll="0.186" />
+        <drag forward="0.076" reverse="0.302" horizontal="0.976" vertical="0.976" pitch="0.44" yaw="0.44" roll="0.22" />
+      </physics>
+    </properties>
+    <connections>
+      <connection ref="con_engine01">
+        <macro ref="engine_missile_dumbfire_mk1_macro" connection="ship" />
+      </connection>
+    </connections>
+  </macro>
+</macros>

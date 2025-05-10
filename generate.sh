@@ -90,7 +90,7 @@ if [[ $(compare " $ANGLE_FACTOR > 2 " ) -eq  1 ]]; then
 fi
 
 echo -e "\n$Yellow ! DISCLAIMER : This generator do not touch weapon damage, because it would underbalance the game regarding shield and hull"
-echo -e "BUT: We can mitigate your factor to balance your weapons range based on an indice calculated on Vanilla weapon ranges (excl. missiles)"
+echo -e "BUT: We can mitigate your factor to balance your weapons range based on an indice calculated on Vanilla weapon ranges (excl. missile engines)"
 echo -e "and avoid beam (which have a longer range) to be too much overpowered in \"kite mode\" against ballistic weapons (laser, galtling, shotgun, etc...)"
 echo -e "NB: We will take weapon tier into account (MK1 or MK2), but we won't balance missile engine (missile have their own lifetime, not depending on their engine)"
 echo -e "In any case, the debug mode (\"./generate.sh -v\") can warn you if value are too high depending on the factor you asked"
@@ -100,8 +100,8 @@ echo -e "$Color_Off"
 ADJUST_FACTOR=0
 MK1MITIGATOR=1
 MK2MITIGATOR=1
-MK1MEDIUM=16000
-MK2MEDIUM=8900
+MK1MEDIUM=15000
+MK2MEDIUM=20000
 
 read -p "Would you like us to adjust your factor depending on our modification to be \"more\" balanced (strongly recommended) ? [Y/N] " -n 1 -r
 echo
@@ -133,19 +133,39 @@ fi
 # Metrics recorder
 COUNT=0
 LONGESTMK1_RANGE_FOUND=0
-SHORTESTMK1_RANGE_FOUND=9999999999
+SHORTESTMK1_RANGE_FOUND=99999999999
 LONGESTMK2_RANGE_FOUND=0
-SHORTESTMK2_RANGE_FOUND=9999999999
+SHORTESTMK2_RANGE_FOUND=99999999999
+LONGESTMK1_IWR_RANGE_FOUND=0
+SHORTESTMK1_IWR_RANGE_FOUND=99999999999
+LONGESTMK2_IWR_RANGE_FOUND=0
+SHORTESTMK2_IWR_RANGE_FOUND=99999999999
 MK1LONGEST_FILE=''
 MK1SHORTEST_FILE=''
 MK2LONGEST_FILE=''
 MK2SHORTEST_FILE=''
+MK1IWRLONGEST_FILE=''
+MK1IWRSHORTEST_FILE=''
+MK2IWRLONGEST_FILE=''
+MK2IWRSHORTEST_FILE=''
 
 echo -e "Applying factor $factor...\n\n"
 # loop over files
 for FILE in "${FINDFILES[@]}"
 do
 	#BEGIN LOGICAL CALCULATION ON A SINGLE FILE
+	
+	# Removing reliquat
+	# Reset value from last time we passed here
+	unset SPEED
+	unset ANGLE
+	unset RANGE
+	unset LIFE
+	unset THRUST
+	unset LOCK_RANGE
+	unset MODIFIED_LINE
+	unset MODIFIED_LOCK_LINE
+	
 	if [[ $DEBUG_VERBOSE_MODE -eq 1 ]]; then
 		echo -e "\n$Yellow => Starting Operating file:\n\t$FILE $Color_Off"
 	fi
@@ -153,8 +173,10 @@ do
 	MACRO=$(grep -oP '<macro name="\K[^"]+' "$FILE")
 	BULLET_LINE=$(grep '<bullet ' "$FILE")
 	TRUST_LINE=$(grep '<thrust ' "$FILE")
+	MISSILE_LINE=$(grep '<missile ' "$FILE")
+	LOCK_LINE=$(grep '<lock ' "$FILE")
 
-	if [[ (-z "$MACRO" || -z "$BULLET_LINE") && (-z "$MACRO" || -z "$TRUST_LINE") ]]; then
+	if [[ (-z "$MACRO" || -z "$BULLET_LINE") && (-z "$MACRO" || -z "$TRUST_LINE")  && (-z "$MACRO" || -z "$MISSILE_LINE") ]]; then
 		echo ""
 		echo -e "$Red ❌\tNo valid macro in file: $FILE$Color_Off"
 		continue
@@ -165,7 +187,8 @@ do
 	[[ $MACRO =~ (gatling|plasma|laser|charge|cannon|shotgun|ion|flak|sticky|arc|swarm|disruptor) ]] && TYPE="ballistic"
 	[[ $MACRO =~ railgun ]] && TYPE="railgun"
 	[[ $MACRO =~ (beam|mining|burst|nova|bio) ]] && TYPE="range_based"
-	[[ $MACRO =~ engine ]] && TYPE="engine"
+	[[ $MACRO =~ ^engine_ ]] && TYPE="engine" 
+	[[ $MACRO =~ ^missile_ ]] && TYPE="missile"
 	
 	# Qualifying tier
 	[[ $MACRO =~ mk1 ]] && MK=1
@@ -187,15 +210,17 @@ do
 		echo "$TRUST_LINE" | grep -oP "$1=\"\K[^\"]+"
 	}
 	
-	#Reset value from last time we passed here
-	unset SPEED
-	unset ANGLE
-	unset RANGE
-	unset LIFE
-	unset THRUST
-	unset MODIFIED_LINE
+	# Getting value for missile
+	get_attr_missile() {
+		echo "$MISSILE_LINE" | grep -oP "$1=\"\K[^\"]+"
+	}
 	
-	# Modifying stats depending on bullet type (or engine)
+	# Getting value for lock missile
+	get_attr_lock() {
+		echo "$LOCK_LINE" | grep -oP "$1=\"\K[^\"]+"
+	}
+	
+	# Modifying stats depending on bullet, weapons or engine type
 	if [[ $TYPE == "ballistic" ]]; then #(gatling|plasma|laser|charge|cannon|shotgun|ion|flak|sticky|arc|swarm|disruptor)
 		SPEED=$(get_attr "speed")
 		ANGLE=$(get_attr "angle")
@@ -207,59 +232,67 @@ do
 		# WARNING : Do not use speed on beam, they are moving at light speed ! Only use range
 		RANGE=$(get_attr "range")
 		LIFE=$(get_attr "lifetime")
+	elif [[ $TYPE == "missile" ]]; then
+		RANGE=$(get_attr_missile "range")
+		LIFE=$(get_attr_missile "lifetime")
+		[[ $LOCK_LINE ]] && LOCK_RANGE=$(get_attr_lock "range")
 	elif [[ $TYPE == "engine" ]]; then
 		THRUST=$(get_attr_engine "forward")
 	fi
 	
-	# Recording METRICS
-	#(gatling|plasma|laser|charge|cannon|shotgun|ion|flak|sticky|arc|swarm|disruptor|railgun)
-	if [[ $TYPE == "ballistic" ||  $TYPE == "railgun" ]]; then
-		METRICS_RANGE=$(calc "$SPEED * $METRICS_LIFE")
-		if [[ $DEBUG_VERBOSE_MODE -eq 1 ]]; then
-			echo "	Vanilla RANGE : $METRICS_RANGE"
-		fi
-		if [[ $MK -eq 1 ]]; then
-			[[ $(compare "$METRICS_RANGE < $SHORTESTMK1_RANGE_FOUND") -eq 1 ]] && SHORTESTMK1_RANGE_FOUND="$METRICS_RANGE" && MK1SHORTEST_FILE="$FILE"
-			[[ $(compare "$METRICS_RANGE > $LONGESTMK1_RANGE_FOUND") -eq 1 ]] && LONGESTMK1_RANGE_FOUND="$METRICS_RANGE" && MK1LONGEST_FILE="$FILE"
-		fi
-		if [[ $MK -eq 2 ]]; then
-			[[ $(compare "$METRICS_RANGE < $SHORTESTMK2_RANGE_FOUND") -eq 1 ]] && SHORTESTMK2_RANGE_FOUND="$METRICS_RANGE" && MK2SHORTEST_FILE="$FILE"
-			[[ $(compare "$METRICS_RANGE > $LONGESTMK2_RANGE_FOUND") -eq 1 ]] && LONGESTMK2_RANGE_FOUND="$METRICS_RANGE" && MK2LONGEST_FILE="$FILE"
-		fi
-	fi
-	
-	#(beam|mining|burst|nova|bio)
-	if [[ $TYPE == "range_based" ]]; then
-		if [[ $DEBUG_VERBOSE_MODE -eq 1 ]]; then
-			echo "	Vanilla RANGE : $RANGE"
-		fi
-		if [[ $MK -eq 1 ]]; then
-			[[ $(compare "$RANGE < $SHORTESTMK1_RANGE_FOUND") -eq 1 ]] && SHORTESTMK1_RANGE_FOUND="$RANGE" && MK1SHORTEST_FILE="$FILE"
-			[[ $(compare "$RANGE > $LONGESTMK1_RANGE_FOUND") -eq 1 ]] && LONGESTMK1_RANGE_FOUND="$RANGE" && MK1LONGEST_FILE="$FILE"
-		fi
-		if [[ $MK -eq 2 ]]; then
-			[[ $(compare "$RANGE < $SHORTESTMK2_RANGE_FOUND") -eq 1 ]] && SHORTESTMK2_RANGE_FOUND="$RANGE" && MK2SHORTEST_FILE="$FILE"
-			[[ $(compare "$RANGE > $LONGESTMK2_RANGE_FOUND") -eq 1 ]] && LONGESTMK2_RANGE_FOUND="$RANGE" && MK2LONGEST_FILE="$FILE"
-		fi
-	fi
-	if [[ $ADJUST_FACTOR -eq 0 ]]; then
-		if [[ ($TYPE != "engine") ]]; then
-			MODIFIED_LINE="$BULLET_LINE"
-			[[ $SPEED ]] && \
-			MODIFIED_LINE=$(echo "$MODIFIED_LINE" | sed -E "s/(speed=\")$SPEED\"/\1$(set_attr "$SPEED * $FACTOR")\"/")
-			[[ $ANGLE ]] && \
-			MODIFIED_LINE=$(echo "$MODIFIED_LINE" | sed -E "s/(angle=\")$ANGLE\"/\1$(set_attr "$ANGLE / $ANGLE_FACTOR")\"/")
-			[[ $RANGE ]] && \
-			MODIFIED_LINE=$(echo "$MODIFIED_LINE" | sed -E "s/(range=\")$RANGE\"/\1$(set_attr "$RANGE * $FACTOR")\"/")
-			[[ $LIFETIME ]] && \
-			MODIFIED_LINE=$(echo "$MODIFIED_LINE" | sed -E "s/(lifetime=\")$LIFETIME\"/\1$(set_attr "$LIFETIME * $FACTOR")\"/")
-		else
-			MODIFIED_LINE="$TRUST_LINE"
-			[[ $THRUST ]] && \
-			MODIFIED_LINE=$(echo "$MODIFIED_LINE" | sed -E "s/(forward=\")$THRUST\"/\1$(set_attr "$THRUST * $FACTOR")\"/")
+	# Special engine case, no factor adjusting
+	if [[ ($TYPE == "engine") ]]; then
+		MODIFIED_LINE="$TRUST_LINE"
+		[[ $THRUST ]] && \
+		MODIFIED_LINE=$(echo "$MODIFIED_LINE" | sed -E "s/(forward=\")$THRUST\"/\1$(set_attr "$THRUST * $FACTOR")\"/")
+		
+		# Special case for engine
+		if [[ ($TYPE == "engine") && ("$TRUST_LINE" != "$MODIFIED_LINE") ]]; then
+			# Special case for engine
+			[[ $DEBUG_VERY_VERBOSE_MODE -eq 1 ]] && echo -e "$Red Old Line: \n$TRUST_LINE" && echo -e "$Color_Off"
+			[[ $DEBUG_VERY_VERBOSE_MODE -eq 1 ]] && echo -e "$Green New modified:\n$MODIFIED_LINE" && echo -e "$Color_Off"
+			echo '<?xml version="1.0" encoding="utf-8"?>' > "$FILE"
+			echo '<!-- Increased Weapon Ranges Generated  -->' >> "$FILE"
+			echo '<diff>' >> "$FILE"
+			echo "  <replace sel=\"/macros/macro[@name='$MACRO']/properties/thrust\">" >> "$FILE"
+			echo "    $MODIFIED_LINE" >> "$FILE"
+			echo "  </replace>" >> "$FILE"
+			echo '</diff>' >> "$FILE"
+			#echo -e "$Green ✔\tDiff generated in $FILE$Color_Off"
+			COUNT=$((COUNT+1))
+			echo -ne "\rDone : $COUNT/$TOTALFILES"
+			continue
+		else 
+			echo -e "\n$Yellow⚠ \tCan't change anything in $FILE$Color_Off"
+			if [[ $POKE_MODE -eq 1 ]]; then
+				echo "Type : $TYPE"
+				echo "Modified attributes : $MODIFIED_LINE"
+			fi
 		fi
 	else
-		if [[ ($TYPE != "engine") ]]; then
+		### NO ENGINE FROM HERE ###
+		if [[ $ADJUST_FACTOR -eq 0 ]]; then
+			if  [[ ($TYPE == "missile") ]]; then
+				MODIFIED_LINE="$MISSILE_LINE"
+				[[ $RANGE ]] && \
+				MODIFIED_LINE=$(echo "$MODIFIED_LINE" | sed -E "s/(range=\")$RANGE\"/\1$(set_attr "$RANGE * $FACTOR")\"/")
+				[[ $LIFETIME ]] && \
+				MODIFIED_LINE=$(echo "$MODIFIED_LINE" | sed -E "s/(lifetime=\")$LIFETIME\"/\1$(set_attr "$LIFETIME * $FACTOR")\"/")
+				[[ $LOCK_LINE ]] && MODIFIED_LOCK_LINE="$LOCK_LINE"
+				[[ $LOCK_RANGE ]] && \
+				MODIFIED_LOCK_LINE=$(echo "$MODIFIED_LOCK_LINE" | sed -E "s/(range=\")$LOCK_RANGE\"/\1$(set_attr "$LOCK_RANGE * $FACTOR")\"/")
+			else
+				MODIFIED_LINE="$BULLET_LINE"
+				[[ $SPEED ]] && \
+				MODIFIED_LINE=$(echo "$MODIFIED_LINE" | sed -E "s/(speed=\")$SPEED\"/\1$(set_attr "$SPEED * $FACTOR")\"/")
+				[[ $ANGLE ]] && \
+				MODIFIED_LINE=$(echo "$MODIFIED_LINE" | sed -E "s/(angle=\")$ANGLE\"/\1$(set_attr "$ANGLE / $ANGLE_FACTOR")\"/")
+				[[ $RANGE ]] && \
+				MODIFIED_LINE=$(echo "$MODIFIED_LINE" | sed -E "s/(range=\")$RANGE\"/\1$(set_attr "$RANGE * $FACTOR")\"/")
+				[[ $LIFETIME ]] && \
+				MODIFIED_LINE=$(echo "$MODIFIED_LINE" | sed -E "s/(lifetime=\")$LIFETIME\"/\1$(set_attr "$LIFETIME * $FACTOR")\"/")
+			fi
+		else
 			# Comparing medium to know if we let the mitigation increase the range or if we have to decrease it
 			[[ $MK -eq 1 ]] && ADJUSTED_FACTOR=$(calc "$FACTOR + $MK1MITIGATOR ")
 			[[ $MK -eq 2 ]] && ADJUSTED_FACTOR=$(calc "$FACTOR + $MK2MITIGATOR ")
@@ -272,13 +305,42 @@ do
 				NEW_RANGE=$(calc "$METRICS_RANGE * $ADJUSTED_FACTOR")
 				WARNING_RANGE=$(calc "$MK1MEDIUM * $ADJUSTED_FACTOR")
 				[[ $MK -eq 2 ]] && WARNING_RANGE=$(calc "$MK2MEDIUM * $ADJUSTED_FACTOR")
+				RANGE_TOO_HIGH=$(compare "$NEW_RANGE > $WARNING_RANGE")
+
+				### AUTO RE-ADJUSTING FACTOR TO REDUCE OVERKILL RANGES ###
+				if [[ $RANGE_TOO_HIGH -eq 1 ]]; then
+					ADJUSTED_FACTOR=$(calc "$ADJUSTED_FACTOR * 0.80" )
+					WARNING_RANGE=$(calc "$MK1MEDIUM * $ADJUSTED_FACTOR")
+					[[ $MK -eq 2 ]] && WARNING_RANGE=$(calc "$MK2MEDIUM * $ADJUSTED_FACTOR")
+					OLD_NEW_RANGE="$NEW_RANGE"
+					NEW_RANGE=$(calc "$METRICS_RANGE * $ADJUSTED_FACTOR" )
+					[[ $DEBUG_MODE -eq 1 ]] && echo -e "\n$Yellow We have detected an overkill range, trying to lower it from $OLD_NEW_RANGE to $NEW_RANGE  $Color_Off"
+					RANGE_TOO_HIGH=$(compare "$NEW_RANGE > $WARNING_RANGE")
+				fi				
+				### END AUTO RE-ADJUSTING ###
+				
 				if [[ $DEBUG_VERBOSE_MODE -eq 1 ]]; then
 					echo "	IWR RANGE : $NEW_RANGE"
 				fi
-				[[ $DEBUG_MODE -eq 1 ]] && [[ $(compare "$NEW_RANGE > $WARNING_RANGE") -eq 1 ]] && \
+				[[ $DEBUG_MODE -eq 1 ]] && [[ $RANGE_TOO_HIGH -eq 1 ]] && \
 				echo -e "\n$Red ! WARNING ! High range (Original: \"$METRICS_RANGE\", New: \"$NEW_RANGE\"), file: $FILE $Color_Off" && \
 				echo -e "$Yellow We suggest you to adjust this value manualy into the file, it probably happened because vanilla value are much higher than other weapons $Color_Off \n"
-			elif [[ $TYPE == "range_based" ]]; then
+				
+				### RECORD METRICS ###
+				if [[ $MK -eq 1 ]]; then
+					[[ $(compare "$METRICS_RANGE < $SHORTESTMK1_RANGE_FOUND") -eq 1 ]] && SHORTESTMK1_RANGE_FOUND="$METRICS_RANGE" && MK1SHORTEST_FILE="$FILE"
+					[[ $(compare "$METRICS_RANGE > $LONGESTMK1_RANGE_FOUND") -eq 1 ]] && LONGESTMK1_RANGE_FOUND="$METRICS_RANGE" && MK1LONGEST_FILE="$FILE"
+					[[ $(compare "$NEW_RANGE < $SHORTESTMK1_IWR_RANGE_FOUND") -eq 1 ]] && SHORTESTMK1_IWR_RANGE_FOUND="$NEW_RANGE" && MK1IWRSHORTEST_FILE="$FILE"
+					[[ $(compare "$NEW_RANGE > $LONGESTMK1_IWR_RANGE_FOUND") -eq 1 ]] && LONGESTMK1_IWR_RANGE_FOUND="$NEW_RANGE" && MK1IWRLONGEST_FILE="$FILE"
+				fi
+				if [[ $MK -eq 2 ]]; then
+					[[ $(compare "$METRICS_RANGE < $SHORTESTMK2_RANGE_FOUND") -eq 1 ]] && SHORTESTMK2_RANGE_FOUND="$METRICS_RANGE" && MK2SHORTEST_FILE="$FILE"
+					[[ $(compare "$METRICS_RANGE > $LONGESTMK2_RANGE_FOUND") -eq 1 ]] && LONGESTMK2_RANGE_FOUND="$METRICS_RANGE" && MK2LONGEST_FILE="$FILE"
+					[[ $(compare "$NEW_RANGE < $SHORTESTMK2_IWR_RANGE_FOUND") -eq 1 ]] && SHORTESTMK2_IWR_RANGE_FOUND="$NEW_RANGE" && MK2IWRSHORTEST_FILE="$FILE"
+					[[ $(compare "$NEW_RANGE > $LONGESTMK2_IWR_RANGE_FOUND") -eq 1 ]] && LONGESTMK2_IWR_RANGE_FOUND="$NEW_RANGE" && MK2IWRLONGEST_FILE="$FILE"
+				fi
+				### END RECORD METRICS ###
+			elif [[ $TYPE == "range_based" ||  $TYPE == "missile" ]]; then
 				[[ $MK -eq 1 ]] && [[ $(compare "$RANGE > $MK1MEDIUM" ) -eq 1 ]] && ADJUSTED_FACTOR=$(calc "$FACTOR - $MK1MITIGATOR ")
 				[[ $MK -eq 2 ]] && [[ $(compare "$RANGE > $MK2MEDIUM" ) -eq 1 ]] && ADJUSTED_FACTOR=$(calc "$FACTOR - $MK2MITIGATOR ")
 				# Fail safe to avoid reducing range instead of increasing it
@@ -286,12 +348,41 @@ do
 				NEW_RANGE=$(calc "$RANGE * $ADJUSTED_FACTOR" )
 				WARNING_RANGE=$(calc "$MK1MEDIUM * $ADJUSTED_FACTOR")
 				[[ $MK -eq 2 ]] && WARNING_RANGE=$(calc "$MK2MEDIUM * $ADJUSTED_FACTOR")
+				RANGE_TOO_HIGH=$(compare "$NEW_RANGE > $WARNING_RANGE")
+				
+				### AUTO RE-ADJUSTING FACTOR TO REDUCE OVERKILL RANGES ###
+				if [[ $RANGE_TOO_HIGH -eq 1 ]]; then
+					ADJUSTED_FACTOR=$(calc "$ADJUSTED_FACTOR * 0.80" )
+					WARNING_RANGE=$(calc "$MK1MEDIUM * $ADJUSTED_FACTOR")
+					[[ $MK -eq 2 ]] && WARNING_RANGE=$(calc "$MK2MEDIUM * $ADJUSTED_FACTOR")
+					OLD_NEW_RANGE="$NEW_RANGE"
+					NEW_RANGE=$(calc "$RANGE * $ADJUSTED_FACTOR" )
+					[[ $DEBUG_MODE -eq 1 ]] && echo -e "\n$Yellow We have detected an overkill range, trying to lower it from $OLD_NEW_RANGE to $NEW_RANGE  $Color_Off"
+					RANGE_TOO_HIGH=$(compare "$NEW_RANGE > $WARNING_RANGE")
+				fi				
+				### END AUTO RE-ADJUSTING ###
+				
 				if [[ $DEBUG_VERBOSE_MODE -eq 1 ]]; then
 					echo "	IWR RANGE : $NEW_RANGE"
 				fi
-				[[ $DEBUG_MODE -eq 1 ]] && [[ $(compare "$NEW_RANGE > $WARNING_RANGE") -eq 1 ]] && \
+				[[ $DEBUG_MODE -eq 1 ]] && [[ $RANGE_TOO_HIGH -eq 1 ]] && \
 				echo -e "\n$Red ! WARNING ! High range (Original: \"$RANGE\", New: \"$NEW_RANGE\"), file: $FILE $Color_Off" && \
 				echo -e "$Yellow We suggest you to adjust this value manualy into the file, it probably happened because vanilla value are much higher than other weapons $Color_Off \n"
+				
+				### RECORD METRICS ###
+				if [[ $MK -eq 1 ]]; then
+					[[ $(compare "$RANGE < $SHORTESTMK1_RANGE_FOUND") -eq 1 ]] && SHORTESTMK1_RANGE_FOUND="$RANGE" && MK1SHORTEST_FILE="$FILE"
+					[[ $(compare "$RANGE > $LONGESTMK1_RANGE_FOUND") -eq 1 ]] && LONGESTMK1_RANGE_FOUND="$RANGE" && MK1LONGEST_FILE="$FILE"
+					[[ $(compare "$RANGE < $SHORTESTMK1_IWR_RANGE_FOUND") -eq 1 ]] && SHORTESTMK1_IWR_RANGE_FOUND="$NEW_RANGE" && MK1IWRSHORTEST_FILE="$FILE"
+					[[ $(compare "$RANGE > $LONGESTMK1_IWR_RANGE_FOUND") -eq 1 ]] && LONGESTMK1_IWR_RANGE_FOUND="$NEW_RANGE" && MK1IWRLONGEST_FILE="$FILE"
+				fi
+				if [[ $MK -eq 2 ]]; then
+					[[ $(compare "$RANGE < $SHORTESTMK2_RANGE_FOUND") -eq 1 ]] && SHORTESTMK2_RANGE_FOUND="$RANGE" && MK2SHORTEST_FILE="$FILE"
+					[[ $(compare "$RANGE > $LONGESTMK2_RANGE_FOUND") -eq 1 ]] && LONGESTMK2_RANGE_FOUND="$RANGE" && MK2LONGEST_FILE="$FILE"
+					[[ $(compare "$RANGE < $SHORTESTMK2_IWR_RANGE_FOUND") -eq 1 ]] && SHORTESTMK2_IWR_RANGE_FOUND="$NEW_RANGE" && MK2IWRSHORTEST_FILE="$FILE"
+					[[ $(compare "$RANGE > $LONGESTMK2_IWR_RANGE_FOUND") -eq 1 ]] && LONGESTMK2_IWR_RANGE_FOUND="$NEW_RANGE" && MK2IWRLONGEST_FILE="$FILE"
+				fi
+				### END RECORD METRICS ###
 			fi
 			[[ $DEBUG_VERY_VERBOSE_MODE -eq 1 ]] && echo -e "$Yellow ADJUSTED_FACTOR: "
 			[[ $DEBUG_VERY_VERBOSE_MODE -eq 1 ]] && echo "$ADJUSTED_FACTOR"
@@ -318,55 +409,57 @@ do
 			MODIFIED_LINE=$(echo "$MODIFIED_LINE" | sed -E "s/(range=\")$RANGE\"/\1$(set_attr "$RANGE * $ADJUSTED_FACTOR")\"/")
 			[[ $LIFETIME ]] && \
 			MODIFIED_LINE=$(echo "$MODIFIED_LINE" | sed -E "s/(lifetime=\")$LIFETIME\"/\1$(set_attr "$LIFETIME * $ADJUSTED_FACTOR")\"/")
-		else
-			MODIFIED_LINE="$TRUST_LINE"
-			[[ $THRUST ]] && \
-			MODIFIED_LINE=$(echo "$MODIFIED_LINE" | sed -E "s/(forward=\")$THRUST\"/\1$(set_attr "$THRUST * $FACTOR")\"/")
+			[[ $LOCK_LINE ]] && MODIFIED_LOCK_LINE="$LOCK_LINE"
+			[[ $LOCK_RANGE ]] && \
+			MODIFIED_LOCK_LINE=$(echo "$MODIFIED_LOCK_LINE" | sed -E "s/(range=\")$LOCK_RANGE\"/\1$(set_attr "$LOCK_RANGE * $ADJUSTED_FACTOR")\"/")
 		fi
-	fi
-	# Diff generation if need (else, we put a warning which can means that the file content isnt match what we searched)
-	# Special case for engine
-	if [[ ($TYPE != "engine") && ("$BULLET_LINE" != "$MODIFIED_LINE") ]]; then
-		[[ $DEBUG_VERY_VERBOSE_MODE -eq 1 ]] && echo -e "$Red Old Line: \n$BULLET_LINE" && echo -e "$Color_Off"
-		[[ $DEBUG_VERY_VERBOSE_MODE -eq 1 ]] && echo -e "$Green New modified:\n$MODIFIED_LINE" && echo -e "$Color_Off"
-		echo '<?xml version="1.0" encoding="utf-8"?>' > "$FILE"
-		echo '<!-- Increased Weapon Ranges Generated  -->' >> "$FILE"
-		echo '<diff>' >> "$FILE"
-		echo "  <replace sel=\"/macros/macro[@name='$MACRO']/properties/bullet\">" >> "$FILE"
-		echo "    $MODIFIED_LINE" >> "$FILE"
-		echo "  </replace>" >> "$FILE"
-		echo '</diff>' >> "$FILE"
-		#echo -e "$Green ✔\tDiff generated in $FILE$Color_Off"
-		COUNT=$((COUNT+1))
-		echo -ne "\rDone : $COUNT/$TOTALFILES"
-	elif [[ ($TYPE == "engine") && ("$TRUST_LINE" != "$MODIFIED_LINE") ]]; then
-		[[ $DEBUG_VERY_VERBOSE_MODE -eq 1 ]] && echo -e "$Red Old Line: \n$TRUST_LINE" && echo -e "$Color_Off"
-		[[ $DEBUG_VERY_VERBOSE_MODE -eq 1 ]] && echo -e "$Green New modified:\n$MODIFIED_LINE" && echo -e "$Color_Off"
-		echo '<?xml version="1.0" encoding="utf-8"?>' > "$FILE"
-		echo '<!-- Increased Weapon Ranges Generated  -->' >> "$FILE"
-		echo '<diff>' >> "$FILE"
-		echo "  <replace sel=\"/macros/macro[@name='$MACRO']/properties/thrust\">" >> "$FILE"
-		echo "    $MODIFIED_LINE" >> "$FILE"
-		echo "  </replace>" >> "$FILE"
-		echo '</diff>' >> "$FILE"
-		#echo -e "$Green ✔\tDiff generated in $FILE$Color_Off"
-		COUNT=$((COUNT+1))
-		echo -ne "\rDone : $COUNT/$TOTALFILES"
-	else
-		echo -e "\n$Yellow⚠ \tCan't change anything in $FILE$Color_Off"
-		if [[ $DEBUG_VERBOSE_MODE -eq 1 ]]; then
-			echo "Modified attributes : $MODIFIED_LINE"
+		
+		# Diff generation if need (else, we put a warning which can means that the file content isnt match what we searched)
+		if [[ ($TYPE != "missile") && ("$BULLET_LINE" != "$MODIFIED_LINE") ]]; then
+			[[ $DEBUG_VERY_VERBOSE_MODE -eq 1 ]] && echo -e "$Red Old Line: \n$BULLET_LINE" && echo -e "$Color_Off"
+			[[ $DEBUG_VERY_VERBOSE_MODE -eq 1 ]] && echo -e "$Green New modified:\n$MODIFIED_LINE" && echo -e "$Color_Off"
+			echo '<?xml version="1.0" encoding="utf-8"?>' > "$FILE"
+			echo '<!-- Increased Weapon Ranges Generated  -->' >> "$FILE"
+			echo '<diff>' >> "$FILE"
+			echo "  <replace sel=\"/macros/macro[@name='$MACRO']/properties/bullet\">" >> "$FILE"
+			echo "    $MODIFIED_LINE" >> "$FILE"
+			echo "  </replace>" >> "$FILE"
+			echo '</diff>' >> "$FILE"
+			#echo -e "$Green ✔\tDiff generated in $FILE$Color_Off"
+			COUNT=$((COUNT+1))
+			echo -ne "\rDone : $COUNT/$TOTALFILES"
+		elif [[ ($TYPE == "missile") && ("$MISSILE_LINE" != "$MODIFIED_LINE") ]]; then
+			# Special case for missile
+			[[ $DEBUG_VERY_VERBOSE_MODE -eq 1 ]] && echo -e "$Red Old Line: \n$MISSILE_LINE" && echo -e "$Color_Off"
+			[[ $DEBUG_VERY_VERBOSE_MODE -eq 1 ]] && echo -e "$Green New modified:\n$MODIFIED_LINE" && echo -e "$Color_Off"
+			echo '<?xml version="1.0" encoding="utf-8"?>' > "$FILE"
+			echo '<!-- Increased Weapon Ranges Generated  -->' >> "$FILE"
+			echo '<diff>' >> "$FILE"
+			echo "  <replace sel=\"/macros/macro[@name='$MACRO']/properties/missile\">" >> "$FILE"
+			echo "    $MODIFIED_LINE" >> "$FILE"
+			echo "  </replace>" >> "$FILE"
+			[[ ! -z $MODIFIED_LOCK_LINE ]] && echo "  <replace sel=\"/macros/macro[@name='$MACRO']/properties/lock\">" >> "$FILE"
+			[[ ! -z $MODIFIED_LOCK_LINE ]] && echo "    $MODIFIED_LOCK_LINE" >> "$FILE"
+			[[ ! -z $MODIFIED_LOCK_LINE ]] && echo "  </replace>" >> "$FILE"
+			[[ $DEBUG_VERY_VERBOSE_MODE -eq 1 ]] && [[ ! -z $MODIFIED_LOCK_LINE ]]  && echo -e "$Red Old Line: \n$LOCK_LINE" && echo -e "$Color_Off"
+			[[ $DEBUG_VERY_VERBOSE_MODE -eq 1 ]] && [[ ! -z $MODIFIED_LOCK_LINE ]] && echo -e "$Green New modified:\n$MODIFIED_LOCK_LINE" && echo -e "$Color_Off"
+			echo '</diff>' >> "$FILE"
+			#echo -e "$Green ✔\tDiff generated in $FILE$Color_Off"
+			COUNT=$((COUNT+1))
+			echo -ne "\rDone : $COUNT/$TOTALFILES"
+		else
+			echo -e "\n$Yellow⚠ \tCan't change anything in $FILE$Color_Off"
+			if [[ $POKE_MODE -eq 1 ]]; then
+				echo "Type : $TYPE"
+				echo "Modified attributes : $MODIFIED_LINE"
+			fi
 		fi
 	fi
 	
-	#DEBUG
-	#exit 0
-	#END DEBUG
-
 	# END LOGICAL CALCULATION
 done
 
-if [[ $DEBUG_VERY_VERBOSE_MODE -eq 1 ]]; then
+if [[ $DEBUG_MODE -eq 1 ]]; then
 	echo -e "\n\nFor METRICS purpose and adjusting FACTOR mitigation, here are Vanilla RANGE metrics"
 	echo -e "$Green === MKI === $Color_Off"
 	echo -e "LONGESTMK1_RANGE_FOUND : $MK1LONGEST_FILE"; calc "$LONGESTMK1_RANGE_FOUND"; echo ""
@@ -379,6 +472,21 @@ if [[ $DEBUG_VERY_VERBOSE_MODE -eq 1 ]]; then
 	echo "SHORTESTMK2_RANGE_FOUND : $MK2SHORTEST_FILE"; calc "$SHORTESTMK2_RANGE_FOUND"; echo ""
 	echo "Suggested mitigating factor by :"; calc "$SHORTESTMK2_RANGE_FOUND / $LONGESTMK2_RANGE_FOUND"; echo ""
 	echo "Medium recorded :"; calc "($SHORTESTMK2_RANGE_FOUND + $LONGESTMK2_RANGE_FOUND) / 2"; echo ""
+fi
+
+if [[ $DEBUG_MODE -eq 1 ]]; then
+	echo -e "\n\nFor METRICS purpose and adjusting FACTOR mitigation, here are IWR RANGE metrics"
+	echo -e "$Green === MKI === $Color_Off"
+	echo -e "LONGESTMK1_IWR_RANGE_FOUND : $MK1IWRLONGEST_FILE"; calc "$LONGESTMK1_IWR_RANGE_FOUND"; echo ""
+	echo "SHORTESTMK1_IWR_RANGE_FOUND : $MK1IWRSHORTEST_FILE"; calc "$SHORTESTMK1_IWR_RANGE_FOUND"; echo ""
+	echo "Suggested mitigating factor by :"; calc "$SHORTESTMK1_IWR_RANGE_FOUND / $LONGESTMK1_IWR_RANGE_FOUND"; echo ""
+	echo "Medium recorded :"; calc "($SHORTESTMK1_IWR_RANGE_FOUND + $LONGESTMK1_IWR_RANGE_FOUND) / 2"; echo ""
+	
+	echo -e "$Green === MKII === $Color_Off"
+	echo "LONGESTMK2_IWR_RANGE_FOUND : $MK2IWRLONGEST_FILE"; calc "$LONGESTMK2_IWR_RANGE_FOUND"; echo ""
+	echo "SHORTESTMK2_IWR_RANGE_FOUND : $MK2IWRSHORTEST_FILE"; calc "$SHORTESTMK2_IWR_RANGE_FOUND"; echo ""
+	echo "Suggested mitigating factor by :"; calc "$SHORTESTMK2_IWR_RANGE_FOUND / $LONGESTMK2_IWR_RANGE_FOUND"; echo ""
+	echo "Medium recorded :"; calc "($SHORTESTMK2_IWR_RANGE_FOUND + $LONGESTMK2_IWR_RANGE_FOUND) / 2"; echo ""
 fi
 
 echo -e "\n"

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Exported by: Matthias (192.168.3.104) at 21.11.2018_12-58-27-->
+<macros>
+  <macro name="missile_torpedo_light_mk1_macro" class="missile">
+    <component ref="missile_torpedo_light_mk1" />
+    <properties>
+      <identification name="{20105,6144}" basename="{20105,6141}" description="{20105,6142}" />
+      <ammunition value="1" />
+      <missile amount="1" barrelamount="1" lifetime="48" range="15000" guided="1" icon="missile_torpedo_mk1" retarget="0" tags="torpedo" />
+      <explosiondamage value="9581" />
+      <reload time="10" />
+      <hull max="69" />
+      <effects>
+        <explosion ref="missile_explosion_heavy_01" />
+        <launch ref="missile_torpedo_muzzle" />
+      </effects>
+      <weapon system="torpedo" />
+      <countermeasure resilience="0.86" />
+      <physics mass="0.884">
+        <inertia pitch="0.217" yaw="0.217" roll="0.108" />
+        <drag forward="0.177" reverse="0.707" horizontal="1.494" vertical="1.494" pitch="0.542" yaw="0.542" roll="0.271" />
+      </physics>
+    </properties>
+    <connections>
+      <connection ref="con_engine01">
+        <macro ref="engine_missile_guided_mk1_macro" connection="ship" />
+      </connection>
+    </connections>
+  </macro>
+</macros>

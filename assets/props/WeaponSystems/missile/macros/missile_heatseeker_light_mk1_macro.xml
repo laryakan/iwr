@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Increased Weapon Ranges Generated  -->
+<diff>
+  <replace sel="/macros/macro[@name='missile_heatseeker_light_mk1_macro']/properties/missile">
+    
+  </replace>
+</diff>
