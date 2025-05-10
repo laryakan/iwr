@@ -310,7 +310,7 @@ do
 			#[[ $POKE_MODE -eq 1 ]] && echo -e "$Red 267 : $ANGLE / $ADJUSTED_FACTOR $Color_Off"
 			[[ $DEBUG_MODE -eq 1 ]] && [[ $(compare "$WARNING_ANGLE > 1") -eq 1 ]] && \
 			echo -e "\n$Red ! WARNING ! High Angle (Original: \"$ANGLE\", New: \"$WARNING_ANGLE\"), file: $FILE $Color_Off"
-			[[ ! -z "$ANGLE" ]] && [[ $DEBUG_MODE -eq 1 ]] && [[ $(compare "$WARNING_ANGLE < ( $ANGLE / 3 )") -eq 1 ]] && \
+			[[ ! -z "$ANGLE" ]] && [[ $DEBUG_MODE -eq 1 ]] && [[ $(compare "$WARNING_ANGLE < ( $ANGLE / 4 )") -eq 1 ]] && \
 			echo -e "\n$Red ! WARNING ! Low angle (Original: \"$ANGLE\", New: \"$WARNING_ANGLE\"), file: $FILE $Color_Off" && \
 			echo -e "$Yellow We suggest you to adjust this value manualy into the file, the weapon maybe be too powerful if too much precise depending on its damage $Color_Off \n"
 			## END POKE ERROR (standard_in) 1: syntax error

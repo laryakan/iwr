@@ -17,7 +17,7 @@ Used with REM INERTIAL MOD (https://www.nexusmods.com/x4foundations/mods/1328), 
 
 You can, of course, use this mod without REM INERTIAL (https://www.nexusmods.com/x4foundations/mods/1328) and REM HYPERDRIVE (https://www.nexusmods.com/x4foundations/mods/1572), but combat may become less understable as weapons will be much more deadly.
 
-The mod is delivered with a bash script (usable on linux or bash alternative) capable of applying rules on files located in "_default" folder (by default, only Vanilla ones). Simply run ./generate.sh and prompt will ask you if you want to reset to default files before applying the factor it will ask you at the next prompt.
+The mod is delivered with a bash script (usable on linux or bash alternative like powershell on Windows) capable of applying rules on files located in "_default" folder (by default, only Vanilla ones). Simply run ./generate.sh and prompt will ask you if you want to reset to default files before applying the factor it will ask you at the next prompt.
 
 Concerning the generate script, where the most effort has been putted into, it has 3 levels of debug verbosity.
 - 0 (no debug) : Will simply generate file without any warning of any sort
