@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <content id="increased_weapon_ranges"
 name="Increased Weapon Ranges"
+description="Increase Weapons Ranges to designated factor"
 author="Laryakan"
 version="110"
 date="2025-05-20"
