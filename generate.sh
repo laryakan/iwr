@@ -74,7 +74,7 @@ done
 while :; do
     read -ep 'Enter range enter a divider from 1 to 3 (put 1 if you want to keep the factor intact): ' DIVIDER
         [[ $DIVIDER =~ ^[[:digit:]]+$ ]] || continue
-        [[ $DIVIDER -lt 3 && $DIVIDER -gt 1 ]] || continue
+        [[ $DIVIDER -lt 3 && $DIVIDER -gt 0 ]] || continue
         break
 done
 
