@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Increased Weapon Ranges Generated  -->
-<diff>
-  <replace sel="/macros/macro[@name='engine_missile_guided_mk1_macro']/properties/thrust">
-          <thrust forward="157.8720" reverse="0" strafe="5" pitch="68.22" yaw="68.22" roll="116.94" />
-  </replace>
-</diff>

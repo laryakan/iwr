@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Increased Weapon Ranges Generated  -->
-<diff>
-  <replace sel="/macros/macro[@name='bullet_bor_l_beam_01_mk1_macro']/properties/bullet">
-          <bullet speed="60000" lifetime="4" range="33726.0000" amount="1" barrelamount="1" icon="weapon_beam_mk1" angle="0" maxhits="1" ricochet="0" restitution="1" scale="1" attach="1" chargetime="4" heatwhilecharging="0" requirefullcharge="1" firewhenfullcharge="1" forcecooldownaftershot="1" influencelist="heavy_drive_disrupt" />
-  </replace>
-</diff>

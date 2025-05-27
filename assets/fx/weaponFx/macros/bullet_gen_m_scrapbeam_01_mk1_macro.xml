@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Increased Weapon Ranges Generated  -->
-<diff>
-  <replace sel="/macros/macro[@name='bullet_gen_m_scrapbeam_01_mk1_macro']/properties/bullet">
-          <bullet speed="2.997925e+08" lifetime="4" range="13380.0240" amount="1" barrelamount="1" icon="weapon_tug_mk1" maxhits="1" ricochet="0" scale="1" attach="1" tug="1" />
-  </replace>
-</diff>

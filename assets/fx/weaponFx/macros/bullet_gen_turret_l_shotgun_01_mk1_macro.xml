@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Increased Weapon Ranges Generated  -->
-<diff>
-  <replace sel="/macros/macro[@name='bullet_gen_turret_l_shotgun_01_mk1_macro']/properties/bullet">
-          <bullet speed="5531.0640" lifetime="2.698" amount="12" barrelamount="2" icon="weapon_shotgun_mk1" timediff="0.002" angle="0.4077" maxhits="3" ricochet="0.5" restitution="1" scale="0" attach="0" />
-  </replace>
-</diff>

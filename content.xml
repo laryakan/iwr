@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<content id="increased_weapon_ranges"
-name="Increased Weapon Ranges"
-description="Increase Weapons Ranges to designated factor"
+<content id="increased_weapon_ranges_wve"
+name="Increased Weapon Ranges for WVE"
+description="Increase Weapons Ranges to designated factor, patch for Weapon Variation Expansion"
 author="Laryakan"
-version="120"
+version="120-wve"
 date="2025-05-20"
 save="false"
 enabled="1">
+<dependency id="7777776" optional="false" name="Weapon Variation Expansion"></dependency>
 </content>

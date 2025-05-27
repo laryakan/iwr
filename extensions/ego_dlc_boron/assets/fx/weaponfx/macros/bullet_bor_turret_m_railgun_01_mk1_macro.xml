@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Increased Weapon Ranges Generated  -->
-<diff>
-  <replace sel="/macros/macro[@name='bullet_bor_turret_m_railgun_01_mk1_macro']/properties/bullet">
-          <bullet speed="16863.0000" lifetime="0.85" amount="1" barrelamount="1" icon="weapon_bor_railgun_mk1" timediff="0.001" angle="0.5" maxhits="1" ricochet="0" restitution="1" scale="0" attach="0" />
-  </replace>
-</diff>

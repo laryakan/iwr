@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Increased Weapon Ranges Generated  -->
+<diff>
+  <replace sel="/macros/macro[@name='bullet_tel_l_w_muon_macro']/properties/bullet">
+          <bullet speed="2550.0000" lifetime="3.1" amount="3" barrelamount="1" icon="weapon_charge_mk2" timediff="0.16" angle="0.09" maxhits="3" ricochet="0.3" restitution="0.55" scale="0" attach="0" sticktime="1" chargetime="1" />
+  </replace>
+</diff>

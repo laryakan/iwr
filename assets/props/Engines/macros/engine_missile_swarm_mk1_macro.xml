@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Increased Weapon Ranges Generated  -->
-<diff>
-  <replace sel="/macros/macro[@name='engine_missile_swarm_mk1_macro']/properties/thrust">
-          <thrust forward="157.8720" reverse="0" strafe="8.167" pitch="77.96" yaw="77.96" roll="116.94" />
-  </replace>
-</diff>

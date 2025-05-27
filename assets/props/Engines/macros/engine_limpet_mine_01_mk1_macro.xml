@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Increased Weapon Ranges Generated  -->
-<diff>
-  <replace sel="/macros/macro[@name='engine_limpet_mine_01_mk1_macro']/properties/thrust">
-          <thrust forward="0.7500" reverse="0.25" strafe="0.25" pitch="0.25" yaw="0.25" roll="0.25" />
-  </replace>
-</diff>

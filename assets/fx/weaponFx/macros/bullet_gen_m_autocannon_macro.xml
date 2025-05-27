@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Increased Weapon Ranges Generated  -->
+<diff>
+  <replace sel="/macros/macro[@name='bullet_gen_m_autocannon_macro']/properties/bullet">
+    	  <bullet speed="1950.0000" lifetime="3.7" amount="1" barrelamount="1" icon="weapon_cannon_mk1" timediff="0.001" angle="0.02" maxhits="1" ricochet="0" restitution="1" scale="0" attach="0" selfdestruct="1" />
+  </replace>
+</diff>
