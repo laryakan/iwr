@@ -8,11 +8,6 @@ Green='\033[0;32m'
 Yellow='\033[0;33m'
 
 # Out of loop functions
-# Setting value
-set_attr() {
-    awk "BEGIN { printf \"%.4f\", $1 }"
-}
-
 # Calculate value
 calc() {
     printf %.4f $(echo "$1" | bc -l)
@@ -75,6 +70,7 @@ while :; do
         break
 done
 
+
 while :; do
     read -ep 'Enter range enter a divider from 1 to 3 (put 1 if you want to keep the factor intact): ' DIVIDER
         [[ $DIVIDER =~ ^[[:digit:]]+$ ]] || continue
@@ -83,16 +79,17 @@ while :; do
 done
 
 FACTOR=$(calc "$FACTOR / $DIVIDER ")
+ADJUSTED_FACTOR=$(calc "$FACTOR")
 
 echo "FACTOR to APPLY : "; calc "$FACTOR"; echo ""
 
 ANGLE_FACTOR=$FACTOR
-if [[ $(compare " $ANGLE_FACTOR > 2 " ) -eq  1 ]]; then
-    read -p "We have detected that you whant to apply a factor higher than 2, would you like to apply a specific angle factor (between 1 and 3)? [Y/N] " -n 1 -r
+if [[ $(compare " $ANGLE_FACTOR > 1 " ) -eq  1 ]]; then
+    read -p "We have detected that you want to apply a factor higher than 1, would you like to apply a specific angle factor (between 1 and 3)? [Y/N] " -n 1 -r
     echo
     if [[ ! $REPLY =~ ^[Nn]$ ]]; then
         while :; do
-        read -ep "Enter angle factor 1 to 3 (1 = Vanilla angle, current factor is $ANGLE_FACTOR): " ANGLE_FACTOR
+        read -ep "Enter angle factor 1 to 3 (1 = Vanilla angle, current factor is $(calc "$ANGLE_FACTOR")): " ANGLE_FACTOR
             [[ $ANGLE_FACTOR =~ ^[[:digit:]]+$ ]] || continue
             [[ $ANGLE_FACTOR -lt 4 && $ANGLE_FACTOR -gt 0 ]] || continue
             break
@@ -195,14 +192,17 @@ do
 
     # Qualifying weapon projectile or engine type based on macro name
     TYPE=""
-    [[ $MACRO =~ (gatling|plasma|laser|charge|cannon|shotgun|ion|flak|sticky|arc|swarm|disruptor) ]] && TYPE="ballistic"
+    [[ $MACRO =~ (gatling|plasma|laser|charge|cannon|shotgun|ion|flak|sticky|arc|swarm|disruptor|proton|thermal|muon) ]] && TYPE="ballistic"
     [[ $MACRO =~ railgun ]] && TYPE="railgun"
     [[ $MACRO =~ (beam|mining|burst|nova|bio) ]] && TYPE="range_based"
     [[ $MACRO =~ ^engine_ ]] && TYPE="engine"
     [[ $MACRO =~ ^missile_ ]] && TYPE="missile"
 
     # Qualifying tier
-    [[ $MACRO =~ mk1 ]] && MK=1
+	# Default macro tier is MK1, this because some modded weapons do not give us any tier, so we will not be abole to adjust factor
+	# Commented because of depreciation
+    # [[ $MACRO =~ mk1 ]] && MK=1
+	MK=1
     [[ $MACRO =~ mk2 ]] && MK=2
 
     #DEBUG
@@ -213,26 +213,26 @@ do
 
     # Getting value
     get_attr() {
-        echo "$BULLET_LINE" | grep -oP "$1=\"\K[^\"]+"
+        echo "$BULLET_LINE" | grep -oP "$1=\"\K[^\"]+" | bc -l
     }
 
     # Getting value for engine
     get_attr_engine() {
-        echo "$TRUST_LINE" | grep -oP "$1=\"\K[^\"]+"
+        echo "$TRUST_LINE" | grep -oP "$1=\"\K[^\"]+" | bc -l
     }
 
     # Getting value for missile
     get_attr_missile() {
-        echo "$MISSILE_LINE" | grep -oP "$1=\"\K[^\"]+"
+        echo "$MISSILE_LINE" | grep -oP "$1=\"\K[^\"]+" | bc -l
     }
 
     # Getting value for lock missile
     get_attr_lock() {
-        echo "$LOCK_LINE" | grep -oP "$1=\"\K[^\"]+"
+        echo "$LOCK_LINE" | grep -oP "$1=\"\K[^\"]+" | bc -l
     }
 
     # Modifying stats depending on bullet, weapons or engine type
-    if [[ $TYPE == "ballistic" ]]; then #(gatling|plasma|laser|charge|cannon|shotgun|ion|flak|sticky|arc|swarm|disruptor)
+    if [[ $TYPE == "ballistic" ]]; then #(gatling|plasma|laser|charge|cannon|shotgun|ion|flak|sticky|arc|swarm|disruptor|proton|thermal|muon)
         SPEED=$(get_attr "speed")
         ANGLE=$(get_attr "angle")
         METRICS_LIFE=$(get_attr "lifetime")
@@ -254,8 +254,8 @@ do
     # Special engine case, no factor adjusting
     if [[ ($TYPE == "engine") ]]; then
         MODIFIED_LINE="$TRUST_LINE"
-        [[ $THRUST ]] && \
-        MODIFIED_LINE=$(echo "$MODIFIED_LINE" | sed -E "s/(forward=\")$THRUST\"/\1$(set_attr "$THRUST * $FACTOR")\"/")
+        [[ $THRUST ]] && NEW_TRUST=$(calc  "$THRUST * $FACTOR") && \
+        MODIFIED_LINE=$(echo "$MODIFIED_LINE" | sed -E "s/(forward=\")$THRUST\"/\1$NEW_TRUST\"/")
 
         # Special case for engine
         if [[ ($TYPE == "engine") && ("$TRUST_LINE" != "$MODIFIED_LINE") ]]; then
@@ -285,32 +285,32 @@ do
         if [[ $ADJUST_FACTOR -eq 0 ]]; then
             if  [[ ($TYPE == "missile") ]]; then
                 MODIFIED_LINE="$MISSILE_LINE"
-                [[ $RANGE ]] && \
-                MODIFIED_LINE=$(echo "$MODIFIED_LINE" | sed -E "s/(range=\")$RANGE\"/\1$(set_attr "$RANGE * $FACTOR")\"/")
-                [[ $LIFETIME ]] && \
-                MODIFIED_LINE=$(echo "$MODIFIED_LINE" | sed -E "s/(lifetime=\")$LIFETIME\"/\1$(set_attr "$LIFETIME * $FACTOR")\"/")
+                [[ $RANGE ]] && NEW_RANGE=$(calc  "$RANGE * $FACTOR") && \
+                MODIFIED_LINE=$(echo "$MODIFIED_LINE" | sed -E "s/(range=\")$RANGE\"/\1$NEW_RANGE\"/")
+                [[ $LIFETIME ]] && NEW_LIFETIME=$(calc  "$LIFETIME * $FACTOR") && \
+                MODIFIED_LINE=$(echo "$MODIFIED_LINE" | sed -E "s/(lifetime=\")$LIFETIME\"/\1$NEW_LIFETIME\"/")
                 [[ $LOCK_LINE ]] && MODIFIED_LOCK_LINE="$LOCK_LINE"
-                [[ $LOCK_RANGE ]] && \
-                MODIFIED_LOCK_LINE=$(echo "$MODIFIED_LOCK_LINE" | sed -E "s/(range=\")$LOCK_RANGE\"/\1$(set_attr "$LOCK_RANGE * $FACTOR")\"/")
+                [[ $LOCK_RANGE ]] && NEW_LOCKRANGE=$(calc "$LOCK_RANGE * $FACTOR") && \
+                MODIFIED_LOCK_LINE=$(echo "$MODIFIED_LOCK_LINE" | sed -E "s/(range=\")$LOCK_RANGE\"/\1$NEW_LOCKRANGE\"/")
             else
                 MODIFIED_LINE="$BULLET_LINE"
-                [[ $SPEED ]] && \
-                MODIFIED_LINE=$(echo "$MODIFIED_LINE" | sed -E "s/(speed=\")$SPEED\"/\1$(set_attr "$SPEED * $FACTOR")\"/")
-                [[ $ANGLE ]] && \
-                MODIFIED_LINE=$(echo "$MODIFIED_LINE" | sed -E "s/(angle=\")$ANGLE\"/\1$(set_attr "$ANGLE / $ANGLE_FACTOR")\"/")
-                [[ $RANGE ]] && \
-                MODIFIED_LINE=$(echo "$MODIFIED_LINE" | sed -E "s/(range=\")$RANGE\"/\1$(set_attr "$RANGE * $FACTOR")\"/")
-                [[ $LIFETIME ]] && \
-                MODIFIED_LINE=$(echo "$MODIFIED_LINE" | sed -E "s/(lifetime=\")$LIFETIME\"/\1$(set_attr "$LIFETIME * $FACTOR")\"/")
+                [[ $SPEED ]] && NEW_SPEED= $(calc "$SPEED * $FACTOR") && \
+                MODIFIED_LINE=$(echo "$MODIFIED_LINE" | sed -E "s/(speed=\")$SPEED\"/\1$NEW_SPEED\"/")
+                 [[ ! -z "$ANGLE" ]] && [[ $ANGLE ]] && NEW_ANGLE=$(calc "$ANGLE / $ANGLE_FACTOR")  && \
+                MODIFIED_LINE=$(echo "$MODIFIED_LINE" | sed -E "s/(angle=\")$ANGLE\"/\1$NEW_ANGLE\"/")
+                [[ $RANGE ]] && NEW_RANGE=$(calc "$RANGE * $FACTOR") && \
+                MODIFIED_LINE=$(echo "$MODIFIED_LINE" | sed -E "s/(range=\")$RANGE\"/\1$NEW_RANGE\"/")
+                [[ $LIFETIME ]] && NEW_LIFETIME=$(calc  "$LIFETIME * $FACTOR") && \
+                MODIFIED_LINE=$(echo "$MODIFIED_LINE" | sed -E "s/(lifetime=\")$LIFETIME\"/\1$NEW_LIFETIME\"/")
             fi
         else
             # Comparing medium to know if we let the mitigation increase the range or if we have to decrease it
-            [[ $MK -eq 1 ]] && ADJUSTED_FACTOR=$(calc "$FACTOR + $MK1MITIGATOR ")
+            [[ $MK -eq 1 ]] && ADJUSTED_FACTOR=$(calc "$FACTOR + $MK1MITIGATOR")
             [[ $MK -eq 2 ]] && ADJUSTED_FACTOR=$(calc "$FACTOR + $MK2MITIGATOR ")
             if [[ $TYPE == "ballistic" ||  $TYPE == "railgun" ]]; then
                 METRICS_RANGE=$(calc "$SPEED * $METRICS_LIFE")
-                [[ $MK -eq 1 ]] && [[ $(compare "$METRICS_RANGE > $MK1MEDIUM" ) -eq 1 ]] && ADJUSTED_FACTOR=$(calc "$FACTOR - $MK1MITIGATOR ")
-                [[ $MK -eq 2 ]] && [[ $(compare "$METRICS_RANGE > $MK2MEDIUM" ) -eq 1 ]] && ADJUSTED_FACTOR=$(calc "$FACTOR - $MK2MITIGATOR ")
+                [[ $MK -eq 1 ]] && [[ $(compare "$METRICS_RANGE > $MK1MEDIUM" ) -eq 1 ]] && [[ $(compare "$FACTOR > $MK1MITIGATOR")  -eq 1 ]] && ADJUSTED_FACTOR=$(calc "$FACTOR - $MK1MITIGATOR ")
+                [[ $MK -eq 2 ]] && [[ $(compare "$METRICS_RANGE > $MK2MEDIUM" ) -eq 1 ]] && [[ $(compare "$FACTOR > $MK2MITIGATOR")  -eq 1 ]] && ADJUSTED_FACTOR=$(calc "$FACTOR - $MK2MITIGATOR ")
                 # Fail safe to avoid reducing range instead of increasing it
                 [[ $(compare "$ADJUSTED_FACTOR < 1") -eq 1 ]] && ADJUSTED_FACTOR=1
                 NEW_RANGE=$(calc "$METRICS_RANGE * $ADJUSTED_FACTOR")
@@ -352,8 +352,8 @@ do
                 fi
                 ### END RECORD METRICS ###
             elif [[ $TYPE == "range_based" ||  $TYPE == "missile" ]]; then
-                [[ $MK -eq 1 ]] && [[ $(compare "$RANGE > $MK1MEDIUM" ) -eq 1 ]] && ADJUSTED_FACTOR=$(calc "$FACTOR - $MK1MITIGATOR ")
-                [[ $MK -eq 2 ]] && [[ $(compare "$RANGE > $MK2MEDIUM" ) -eq 1 ]] && ADJUSTED_FACTOR=$(calc "$FACTOR - $MK2MITIGATOR ")
+                [[ $MK -eq 1 ]] && [[ $(compare "$RANGE > $MK1MEDIUM" ) -eq 1 ]] && [[ $(compare "$FACTOR > $MK1MITIGATOR" ) -eq 1 ]] && ADJUSTED_FACTOR=$(calc "$FACTOR - $MK1MITIGATOR ")
+                [[ $MK -eq 2 ]] && [[ $(compare "$RANGE > $MK2MEDIUM" ) -eq 1 ]] && [[ $(compare "$FACTOR > $MK2MITIGATOR" ) -eq 1 ]] && ADJUSTED_FACTOR=$(calc "$FACTOR - $MK2MITIGATOR ")
                 # Fail safe to avoid reducing range instead of increasing it
                 [[ $(compare "$ADJUSTED_FACTOR < 1") -eq 1 ]] && ADJUSTED_FACTOR=1
                 NEW_RANGE=$(calc "$RANGE * $ADJUSTED_FACTOR" )
@@ -403,26 +403,26 @@ do
             [[ $(compare "$FACTOR == $ANGLE_FACTOR") -eq 1 ]] && ANGLE_FACTOR=$ADJUSTED_FACTOR
 
             MODIFIED_LINE="$BULLET_LINE"
-            [[ $SPEED ]] && \
-            MODIFIED_LINE=$(echo "$MODIFIED_LINE" | sed -E "s/(speed=\")$SPEED\"/\1$(set_attr "$SPEED * $ADJUSTED_FACTOR")\"/")
-            [[ $ANGLE ]] && \
-            MODIFIED_LINE=$(echo "$MODIFIED_LINE" | sed -E "s/(angle=\")$ANGLE\"/\1$(set_attr "$ANGLE / $ANGLE_FACTOR")\"/")
+            [[ $SPEED ]] && NEW_SPEED=$(calc "$SPEED * $FACTOR") && \
+            MODIFIED_LINE=$(echo "$MODIFIED_LINE" | sed -E "s/(speed=\")$SPEED\"/\1$NEW_SPEED\"/")
+            [[ ! -z "$ANGLE" ]] && [[ $ANGLE ]] && NEW_ANGLE=$(calc "$ANGLE / $ANGLE_FACTOR") && \
+            MODIFIED_LINE=$(echo "$MODIFIED_LINE" | sed -E "s/(angle=\")$ANGLE\"/\1$NEW_ANGLE\"/")
             ## START POKE ERROR (standard_in) 1: syntax error
-            [[ ! -z "$ANGLE" ]] && WARNING_ANGLE=$(calc "$ANGLE / $ANGLE_FACTOR")
-            #[[ $POKE_MODE -eq 1 ]] && echo -e "$Red 267 : $ANGLE / $ADJUSTED_FACTOR $Color_Off"
+            [[ ! -z "$ANGLE" ]] && WARNING_ANGLE=$NEW_ANGLE
+            [[ $POKE_MODE -eq 1 ]] && echo -e "$Red 413 : $(calc "$ADJUSTED_FACTOR") $Color_Off"
             [[ $DEBUG_MODE -eq 1 ]] && [[ $(compare "$WARNING_ANGLE > 1") -eq 1 ]] && \
             echo -e "\n$Red ! WARNING ! High Angle (Original: \"$ANGLE\", New: \"$WARNING_ANGLE\"), file: $FILE $Color_Off"
             [[ ! -z "$ANGLE" ]] && [[ $DEBUG_MODE -eq 1 ]] && [[ $(compare "$WARNING_ANGLE < ( $ANGLE / 4 )") -eq 1 ]] && \
             echo -e "\n$Red ! WARNING ! Low angle (Original: \"$ANGLE\", New: \"$WARNING_ANGLE\"), file: $FILE $Color_Off" && \
             echo -e "$Yellow We suggest you to adjust this value manualy into the file, the weapon maybe be too powerful if too much precise depending on its damage $Color_Off \n"
             ## END POKE ERROR (standard_in) 1: syntax error
-            [[ $RANGE ]] && \
-            MODIFIED_LINE=$(echo "$MODIFIED_LINE" | sed -E "s/(range=\")$RANGE\"/\1$(set_attr "$RANGE * $ADJUSTED_FACTOR")\"/")
-            [[ $LIFETIME ]] && \
-            MODIFIED_LINE=$(echo "$MODIFIED_LINE" | sed -E "s/(lifetime=\")$LIFETIME\"/\1$(set_attr "$LIFETIME * $ADJUSTED_FACTOR")\"/")
+            [[ $RANGE ]] && NEW_RANGE=$(calc "$RANGE * $ADJUSTED_FACTOR") && \
+            MODIFIED_LINE=$(echo "$MODIFIED_LINE" | sed -E "s/(range=\")$RANGE\"/\1$NEW_RANGE\"/")
+            [[ $LIFETIME ]] && NEW_LIFETIME=$(calc "$LIFETIME * $ADJUSTED_FACTOR") && \
+            MODIFIED_LINE=$(echo "$MODIFIED_LINE" | sed -E "s/(lifetime=\")$LIFETIME\"/\1$NEW_LIFETIME\"/")
             [[ $LOCK_LINE ]] && MODIFIED_LOCK_LINE="$LOCK_LINE"
-            [[ $LOCK_RANGE ]] && \
-            MODIFIED_LOCK_LINE=$(echo "$MODIFIED_LOCK_LINE" | sed -E "s/(range=\")$LOCK_RANGE\"/\1$(set_attr "$LOCK_RANGE * $ADJUSTED_FACTOR")\"/")
+            [[ $LOCK_RANGE ]] && NEW_LOCKRANGE=$(calc "$LOCK_RANGE * $ADJUSTED_FACTOR") && \
+            MODIFIED_LOCK_LINE=$(echo "$MODIFIED_LOCK_LINE" | sed -E "s/(range=\")$LOCK_RANGE\"/\1$NEW_LOCKRANGE\"/")
         fi
 
         # Diff generation if need (else, we put a warning which can means that the file content isnt match what we searched)
@@ -478,11 +478,14 @@ if [[ $DEBUG_MODE -eq 1 ]]; then
     echo "Suggested mitigating factor by :"; calc "$SHORTESTMK1_RANGE_FOUND / $LONGESTMK1_RANGE_FOUND"; echo ""
     echo "Medium recorded :"; calc "($SHORTESTMK1_RANGE_FOUND + $LONGESTMK1_RANGE_FOUND) / 2"; echo ""
 
-    echo -e "$Green === MKII === $Color_Off"
-    echo "LONGESTMK2_RANGE_FOUND : $MK2LONGEST_FILE"; calc "$LONGESTMK2_RANGE_FOUND"; echo ""
-    echo "SHORTESTMK2_RANGE_FOUND : $MK2SHORTEST_FILE"; calc "$SHORTESTMK2_RANGE_FOUND"; echo ""
-    echo "Suggested mitigating factor by :"; calc "$SHORTESTMK2_RANGE_FOUND / $LONGESTMK2_RANGE_FOUND"; echo ""
-    echo "Medium recorded :"; calc "($SHORTESTMK2_RANGE_FOUND + $LONGESTMK2_RANGE_FOUND) / 2"; echo ""
+	if [[ $(compare "$LONGESTMK2_RANGE_FOUND > 0") -eq 1 ]]; then
+		# No MKI found, maybe because we have generated from a mod with no tier qualification
+		echo -e "$Green === MKII === $Color_Off"
+		echo "LONGESTMK2_RANGE_FOUND : $MK2LONGEST_FILE"; calc "$LONGESTMK2_RANGE_FOUND"; echo ""
+		echo "SHORTESTMK2_RANGE_FOUND : $MK2SHORTEST_FILE"; calc "$SHORTESTMK2_RANGE_FOUND"; echo ""
+		echo "Suggested mitigating factor by :"; calc "$SHORTESTMK2_RANGE_FOUND / $LONGESTMK2_RANGE_FOUND"; echo ""
+		echo "Medium recorded :"; calc "($SHORTESTMK2_RANGE_FOUND + $LONGESTMK2_RANGE_FOUND) / 2"; echo ""
+	fi
 fi
 
 if [[ $DEBUG_MODE -eq 1 ]]; then
@@ -493,11 +496,14 @@ if [[ $DEBUG_MODE -eq 1 ]]; then
     echo "Suggested mitigating factor by :"; calc "$SHORTESTMK1_IWR_RANGE_FOUND / $LONGESTMK1_IWR_RANGE_FOUND"; echo ""
     echo "Medium recorded :"; calc "($SHORTESTMK1_IWR_RANGE_FOUND + $LONGESTMK1_IWR_RANGE_FOUND) / 2"; echo ""
 
-    echo -e "$Green === MKII === $Color_Off"
-    echo "LONGESTMK2_IWR_RANGE_FOUND : $MK2IWRLONGEST_FILE"; calc "$LONGESTMK2_IWR_RANGE_FOUND"; echo ""
-    echo "SHORTESTMK2_IWR_RANGE_FOUND : $MK2IWRSHORTEST_FILE"; calc "$SHORTESTMK2_IWR_RANGE_FOUND"; echo ""
-    echo "Suggested mitigating factor by :"; calc "$SHORTESTMK2_IWR_RANGE_FOUND / $LONGESTMK2_IWR_RANGE_FOUND"; echo ""
-    echo "Medium recorded :"; calc "($SHORTESTMK2_IWR_RANGE_FOUND + $LONGESTMK2_IWR_RANGE_FOUND) / 2"; echo ""
+	if [[ $(compare "$LONGESTMK2_RANGE_FOUND > 0") -eq 1 ]]; then
+		# No MKI found, maybe because we have generated from a mod with no tier qualification
+		echo -e "$Green === MKII === $Color_Off"
+		echo "LONGESTMK2_IWR_RANGE_FOUND : $MK2IWRLONGEST_FILE"; calc "$LONGESTMK2_IWR_RANGE_FOUND"; echo ""
+		echo "SHORTESTMK2_IWR_RANGE_FOUND : $MK2IWRSHORTEST_FILE"; calc "$SHORTESTMK2_IWR_RANGE_FOUND"; echo ""
+		echo "Suggested mitigating factor by :"; calc "$SHORTESTMK2_IWR_RANGE_FOUND / $LONGESTMK2_IWR_RANGE_FOUND"; echo ""
+		echo "Medium recorded :"; calc "($SHORTESTMK2_IWR_RANGE_FOUND + $LONGESTMK2_IWR_RANGE_FOUND) / 2"; echo ""
+	fi
 fi
 
 echo -e "\n"
