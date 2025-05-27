@@ -2,6 +2,6 @@
 <!-- Increased Weapon Ranges Generated  -->
 <diff>
   <replace sel="/macros/macro[@name='bullet_pir_turret_l_battleship_01_laser_01_mk1_macro']/properties/bullet">
-          <bullet speed="6257.3994" lifetime="4.518" amount="1" barrelamount="2" icon="weapon_laser_mk1" timediff="0.001" angle="0.0065" maxhits="1" ricochet="0" restitution="1" scale="0" attach="0">
+          <bullet speed="3061.3500" lifetime="4.518" amount="1" barrelamount="2" icon="weapon_laser_mk1" timediff="0.001" angle="0.02" maxhits="1" ricochet="0" restitution="1" scale="0" attach="0">
   </replace>
 </diff>

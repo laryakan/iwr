@@ -2,6 +2,6 @@
 <!-- Increased Weapon Ranges Generated  -->
 <diff>
   <replace sel="/macros/macro[@name='bullet_ter_s_laser_01_mk2_macro']/properties/bullet">
-          <bullet speed="19359.1296" lifetime="0.44" amount="1" barrelamount="1" icon="weapon_laser_mk2" timediff="0.006" angle="0.0326" maxhits="1" ricochet="0" scale="0" attach="0" />
+          <bullet speed="9331.2000" lifetime="0.44" amount="1" barrelamount="1" icon="weapon_laser_mk2" timediff="0.006" angle="0.1" maxhits="1" ricochet="0" scale="0" attach="0" />
   </replace>
 </diff>

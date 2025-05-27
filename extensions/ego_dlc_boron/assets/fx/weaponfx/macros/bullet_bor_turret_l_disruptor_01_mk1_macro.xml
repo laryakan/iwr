@@ -2,6 +2,6 @@
 <!-- Increased Weapon Ranges Generated  -->
 <diff>
   <replace sel="/macros/macro[@name='bullet_bor_turret_l_disruptor_01_mk1_macro']/properties/bullet">
-          <bullet speed="21768.6000" lifetime="1.5" barrelamount="1" icon="weapon_bor_disruptor_mk1" timediff="0.008" angle="0.6523" maxhits="1" ricochet="0" restitution="1" scale="0" attach="0" selfdestruct="1" plannedselfdestruct="1" selfdestructtimediff="0.15" selfdestructmintime="0.2" influencelist="heavy_mam_thruster_disrupt" />
+          <bullet speed="10650.0000" lifetime="1.5" barrelamount="1" icon="weapon_bor_disruptor_mk1" timediff="0.008" angle="1.2771" maxhits="1" ricochet="0" restitution="1" scale="0" attach="0" selfdestruct="1" plannedselfdestruct="1" selfdestructtimediff="0.15" selfdestructmintime="0.2" influencelist="heavy_mam_thruster_disrupt" />
   </replace>
 </diff>

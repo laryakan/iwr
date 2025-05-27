@@ -2,6 +2,6 @@
 <!-- Increased Weapon Ranges Generated  -->
 <diff>
   <replace sel="/macros/macro[@name='bullet_gen_s_burst_01_mk1_macro']/properties/bullet">
-          <bullet speed="96000" lifetime="0.15" range="6132.0000" amount="1" barrelamount="1" delay="0.2" icon="weapon_burst_mk1" timediff="0.05" angle="2" maxhits="1" ricochet="0" restitution="1" scale="1" attach="1" />
+          <bullet speed="96000" lifetime="0.15" range="3288.6000" amount="1" barrelamount="1" delay="0.2" icon="weapon_burst_mk1" timediff="0.05" angle="2" maxhits="1" ricochet="0" restitution="1" scale="1" attach="1" />
   </replace>
 </diff>

@@ -2,6 +2,6 @@
 <!-- Increased Weapon Ranges Generated  -->
 <diff>
   <replace sel="/macros/macro[@name='bullet_kha_xl_beam_01_mk1_macro']/properties/bullet">
-          <bullet speed="100000" lifetime="6" range="46944.0000" amount="1" barrelamount="1" angle="0" maxhits="1" ricochet="0" restitution="1" scale="1" attach="1" chargetime="10" heatwhilecharging="0" requirefullcharge="1" firewhenfullcharge="1" forcecooldownaftershot="1" />
+          <bullet speed="100000" lifetime="6" range="22944.0000" amount="1" barrelamount="1" angle="0" maxhits="1" ricochet="0" restitution="1" scale="1" attach="1" chargetime="10" heatwhilecharging="0" requirefullcharge="1" firewhenfullcharge="1" forcecooldownaftershot="1" />
   </replace>
 </diff>

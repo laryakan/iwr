@@ -2,6 +2,6 @@
 <!-- Increased Weapon Ranges Generated  -->
 <diff>
   <replace sel="/macros/macro[@name='bullet_ter_turret_m_gatling_01_mk1_macro']/properties/bullet">
-          <bullet speed="3292.8840" lifetime="3.074" amount="1" barrelamount="2" timediff="0.032" angle="0.1761" maxhits="2" ricochet="0.01" restitution="0.3" scale="0" attach="0" />
+          <bullet speed="1611.0000" lifetime="3.074" amount="1" barrelamount="2" timediff="0.032" angle="0.54" maxhits="2" ricochet="0.01" restitution="0.3" scale="0" attach="0" />
   </replace>
 </diff>

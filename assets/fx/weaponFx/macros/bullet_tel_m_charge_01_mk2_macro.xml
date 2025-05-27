@@ -2,6 +2,6 @@
 <!-- Increased Weapon Ranges Generated  -->
 <diff>
   <replace sel="/macros/macro[@name='bullet_tel_m_charge_01_mk2_macro']/properties/bullet">
-          <bullet speed="3911.7840" lifetime="3" amount="3" barrelamount="1" icon="weapon_charge_mk2" timediff="0.16" angle="0.0294" maxhits="3" ricochet="0.3" restitution="0.55" scale="0" attach="0" sticktime="1" chargetime="1" />
+          <bullet speed="1885.5000" lifetime="3" amount="3" barrelamount="1" icon="weapon_charge_mk2" timediff="0.16" angle="0.09" maxhits="1" ricochet="0" scale="0" attach="0" sticktime="1" chargetime="1" />
   </replace>
 </diff>

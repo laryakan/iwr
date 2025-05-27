@@ -2,6 +2,6 @@
 <!-- Increased Weapon Ranges Generated  -->
 <diff>
   <replace sel="/macros/macro[@name='bullet_arg_turret_l_mining_01_mk1_macro']/properties/bullet">
-          <bullet speed="7000" lifetime="4" range="21462.0000" amount="1" barrelamount="1" icon="weapon_mining_mk1" maxhits="1" ricochet="0" scale="1" attach="1" />
+          <bullet speed="7000" lifetime="4" range="10962.0000" amount="1" barrelamount="1" icon="weapon_mining_mk1" maxhits="1" ricochet="0" scale="1" attach="1" />
   </replace>
 </diff>

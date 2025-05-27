@@ -5,6 +5,6 @@
     
   </replace>
   <replace sel="/macros/macro[@name='missile_emp_mk1_macro']/properties/lock">
-          <lock time="2" range="46944.0000" />
+          <lock time="2" range="22944.0000" />
   </replace>
 </diff>

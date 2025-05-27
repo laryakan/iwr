@@ -2,6 +2,6 @@
 <!-- Increased Weapon Ranges Generated  -->
 <diff>
   <replace sel="/macros/macro[@name='bullet_xen_turret_l_plasma_01_mk1_story_macro']/properties/bullet">
-          <bullet speed="2759.4000" lifetime="4" scale="0" attach="0" selfdestructmintime="2" />
+          <bullet speed="1350.0000" lifetime="4" scale="0" attach="0" selfdestructmintime="2" />
   </replace>
 </diff>

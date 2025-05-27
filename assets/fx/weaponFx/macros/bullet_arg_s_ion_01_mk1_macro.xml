@@ -2,6 +2,6 @@
 <!-- Increased Weapon Ranges Generated  -->
 <diff>
   <replace sel="/macros/macro[@name='bullet_arg_s_ion_01_mk1_macro']/properties/bullet">
-          <bullet speed="5886.7200" lifetime="1.5" amount="1" barrelamount="1" icon="weapon_ion_mk1" timediff="0.021" angle="0.0228" maxhits="1" ricochet="0" scale="0" attach="0" />
+          <bullet speed="2880.0000" lifetime="1.5" amount="1" barrelamount="1" icon="weapon_ion_mk1" timediff="0.021" angle="0.07" maxhits="1" ricochet="0" scale="0" attach="0" />
   </replace>
 </diff>

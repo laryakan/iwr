@@ -2,6 +2,6 @@
 <!-- Increased Weapon Ranges Generated  -->
 <diff>
   <replace sel="/macros/macro[@name='bullet_kha_turret_l_beam_01_mk1_macro']/properties/bullet">
-          <bullet speed="16000" lifetime="1.5" range="24528.0000" amount="1" barrelamount="1" maxhits="1" ricochet="0" restitution="1" scale="1" attach="1" />
+          <bullet speed="16000" lifetime="1.5" range="12528.0000" amount="1" barrelamount="1" maxhits="1" ricochet="0" restitution="1" scale="1" attach="1" />
   </replace>
 </diff>
