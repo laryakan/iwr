@@ -3,7 +3,7 @@
 name="Increased Weapon Ranges"
 description="Increase Weapons Ranges to designated factor"
 author="Laryakan"
-version="110"
+version="120"
 date="2025-05-20"
 save="false"
 enabled="1">
