@@ -410,7 +410,8 @@ do
             ## START POKE ERROR (standard_in) 1: syntax error
             [[ ! -z "$ANGLE" ]] && WARNING_ANGLE=$NEW_ANGLE
             [[ $POKE_MODE -eq 1 ]] && echo -e "$Red 413 : $(calc "$ADJUSTED_FACTOR") $Color_Off"
-            [[ $DEBUG_MODE -eq 1 ]] && [[ $(compare "$WARNING_ANGLE > 1") -eq 1 ]] && \
+			# Ignore high angle warning on railgun, irrevelant, wont be reported in most case
+            [[ $DEBUG_MODE -eq 1 && $TYPE != "railgun" ]] && [[ $(compare "$WARNING_ANGLE > 1") -eq 1 ]] && \
             echo -e "\n$Red ! WARNING ! High Angle (Original: \"$ANGLE\", New: \"$WARNING_ANGLE\"), file: $FILE $Color_Off"
             [[ ! -z "$ANGLE" ]] && [[ $DEBUG_MODE -eq 1 ]] && [[ $(compare "$WARNING_ANGLE < ( $ANGLE / 4 )") -eq 1 ]] && \
             echo -e "\n$Red ! WARNING ! Low angle (Original: \"$ANGLE\", New: \"$WARNING_ANGLE\"), file: $FILE $Color_Off" && \
