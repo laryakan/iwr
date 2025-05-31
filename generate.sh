@@ -184,7 +184,7 @@ do
     MISSILE_LINE=$(grep '<missile ' "$FILE")
     LOCK_LINE=$(grep '<lock ' "$FILE")
 
-    if [[ (-z "$MACRO" || -z "$BULLET_LINE") && (-z "$MACRO" || -z "$TRUST_LINE")  && (-z "$MACRO" || -z "$MISSILE_LINE") ]]; then
+    if [[ (-z "$MACRO" || -z "$BULLET_LINE") && (-z "$MACRO" || -z "$TRUST_LINE")  && (-z "$MACRO" || -z "$LOCK_LINE")  &&  (-z "$MACRO" || -z "$MISSILE_LINE")]]; then
         echo ""
         echo -e "$Red ❌\tNo valid macro in file: $FILE$Color_Off"
         continue
@@ -402,7 +402,11 @@ do
             # In case that the angle factor is still the same as the original factor, we to a favor to the user and apply the mitigation to it... even if the angle will probably remain too low
             [[ $(compare "$FACTOR == $ANGLE_FACTOR") -eq 1 ]] && ANGLE_FACTOR=$ADJUSTED_FACTOR
 
-            MODIFIED_LINE="$BULLET_LINE"
+			 if  [[ ($TYPE == "missile") ]]; then
+				MODIFIED_LINE="$MISSILE_LINE"
+			else
+				MODIFIED_LINE="$BULLET_LINE"
+			fi
             [[ $SPEED ]] && NEW_SPEED=$(calc "$SPEED * $FACTOR") && \
             MODIFIED_LINE=$(echo "$MODIFIED_LINE" | sed -E "s/(speed=\")$SPEED\"/\1$NEW_SPEED\"/")
             [[ ! -z "$ANGLE" ]] && [[ $ANGLE ]] && NEW_ANGLE=$(calc "$ANGLE / $ANGLE_FACTOR") && \

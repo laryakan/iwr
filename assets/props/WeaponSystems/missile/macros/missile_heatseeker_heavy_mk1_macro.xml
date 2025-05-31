@@ -2,6 +2,6 @@
 <!-- Increased Weapon Ranges Generated  -->
 <diff>
   <replace sel="/macros/macro[@name='missile_heatseeker_heavy_mk1_macro']/properties/missile">
-    
+          <missile amount="1" barrelamount="1" lifetime="43.2" range="10962.0000" guided="1" icon="hud_ms_heatseeker_heavy_mk1" retarget="0" tags="guided" />
   </replace>
 </diff>

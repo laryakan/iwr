@@ -2,6 +2,6 @@
 <!-- Increased Weapon Ranges Generated  -->
 <diff>
   <replace sel="/macros/macro[@name='missile_dumbfire_heavy_mk2_macro']/properties/missile">
-    
+          <missile amount="1" barrelamount="1" lifetime="25.92" range="16120.0000" guided="0" icon="hud_ms_dumbfire_heavy_mk2" tags="dumbfire" />
   </replace>
 </diff>
