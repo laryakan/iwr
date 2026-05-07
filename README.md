@@ -18,27 +18,7 @@ I can  recommends you to use this mod with borther mods which increase space siz
 - It also affect Missiles/Torpedoes Speed by modifying their engines.
 - Space Suit Laser (Gun and Repair) are excluded because you will not shoot very far in EVA anyway.
 
-### Flavour
-[REM INERTIAL](https://www.nexusmods.com/x4foundations/mods/1328) : Change the ship physics, it can be a bit clunky, but along side Increased Weapon Ranges, this mod can be a alternative to REM OVERHAUL (see below). Personally, I dont use it anymore because the drift make aiming very hard, AI hardly manage manoeuvers and even Lockboxes drifts while aiming to it :-D
-
-### Alternative
-Alternative mods if you don't like Increased Weapon Ranges mod.
-First, if you want to change value a little bit and know how to execute a bash script, you can try out "generate.sh".
-If what you're looking for is a mod which go further than range,
-
-- For Vanilla Weapons :
-	- [Simple Combat Overhaul (SCO)﻿﻿](https://www.nexusmods.com/x4foundations/mods/750) : 
-﻿﻿		- This mods is like applying a factor 2 to weapons, but also adjust shield and S ship engines, and so, can't be used with REM HYPERDRIVE
-
-- If you want a total overhaul of ship equipment which is compatible with XRSGE and REM HYPERDRIVE :
-	- [REM OVERHAUL﻿](https://www.nexusmods.com/x4foundations/mods/848) :
-﻿﻿		- This is the default choice if you want to play [XRSGE](https://www.nexusmods.com/x4foundations/mods/1140) and [REM HYPERDRIVE](https://www.nexusmods.com/x4foundations/mods/1572), with REM OVERHAUL﻿ you don't need REM INERTIAL MOD
-
-- And at last but not least, the famous :
-	- [Variety and Rebalance Overhaul (VRO)](https://www.nexusmods.com/x4foundations/mods/305)﻿ :
-﻿﻿		- This is the most famous weapons and equipment overhaul, but also, it will not be compatible with any mod of the REM Suite
-
-### The ./generate.sh script
+### The ./generate.sh script (only available on Nexus and Github)
 The mod is delivered with a bash script (usable on linux or bash alternative like powershell on Windows) capable of applying rules on files located in "_default" folder. 
 You must extract macros from the game files since I removed em from my repository. You maybe can find them in some of my 7z in the release section, prior 1.3.0 (X4 7.60).
 It was bloating the repo. If you want a clean extract, you can use X TOOLS. The macro you're looking for are in CAT 07. As for the extensions, often in CAT ext_01.
@@ -55,6 +35,56 @@ The script is able to mitigate your factor to balance weapon a bit more and avoi
 It's also able to detected over-valued ranges and under-valued angle. In fact, It can also apply a factor to ranges and another to angles.
 Have a weapons like a shotgun than can shoot far away with the same precision has a railgun isn't really the purpose of this script, but you can try it if you want.
 Anyway, the script will prompt you for everything it needs to generate files in a balanced way, that you can simply ignore and do your thing.
+
+### Reminder
+The XML files your are looking at are in CAT 07 for Vanilla and CAT ext_01 for extension.
+Their paths are (as for example in version 9.0 BETA) :
+```
+├── assets
+│   ├── fx
+│   │   └── weaponFx
+│   │       └── macros
+│   └── props
+│       ├── Engines
+│       │   └── macros
+│       └── WeaponSystems
+│           └── missile
+│               └── macros
+└── extensions
+    ├── ego_dlc_boron
+    │   └── assets
+    │       └── fx
+    │           └── weaponfx
+    │               └── macros
+    ├── ego_dlc_pirate
+    │   └── assets
+    │       └── fx
+    │           └── weaponfx
+    │               └── macros
+    ├── ego_dlc_split
+    │   └── assets
+    │       ├── fx
+    │       │   └── weaponfx
+    │       │       └── macros
+    │       └── props
+    │           └── WeaponSystems
+    │               └── missile
+    │                   └── macros
+    ├── ego_dlc_terran
+    │   └── assets
+    │       └── fx
+    │           └── weaponfx
+    │               └── macros
+    └── ego_dlc_timelines
+        └── assets
+            ├── fx
+            │   └── weaponfx
+            │       └── macros
+            └── props
+                └── weaponsystems
+                    └── missile
+                        └── macros
+```
 
 ## Requirements ?
 - None other than the game

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Increased Weapon Ranges Generated  -->
+<diff>
+  <replace sel="/macros/macro[@name='missile_gen_s_emp_01_mk1_macro']/properties/missile">
+          <missile amount="1" barrelamount="1" lifetime="10" range="25238.4000" influencelist="emp_missile" guided="1" icon="hud_ms_emp_mk1" retarget="0" tags="smallguided" />
+  </replace>
+  <replace sel="/macros/macro[@name='missile_gen_s_emp_01_mk1_macro']/properties/lock">
+          <lock time="2" range="25238.4000" />
+  </replace>
+</diff>
