@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Increased Weapon Ranges Generated  -->
+<diff>
+  <replace sel="/macros/macro[@name='missile_gen_l_dumbfire_01_mk1_macro']/properties/missile">
+          <missile amount="4" angle="1" barrelamount="1" timediff="0.5" lifetime="12" range="10179.0000" guided="0" icon="hud_ms_cluster_heavy_mk1" tags="largedumbfire" />
+  </replace>
+</diff>

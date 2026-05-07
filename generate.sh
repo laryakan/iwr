@@ -192,7 +192,7 @@ do
 
     # Qualifying weapon projectile or engine type based on macro name
     TYPE=""
-    [[ $MACRO =~ (gatling|plasma|laser|charge|cannon|shotgun|ion|flak|sticky|arc|swarm|disruptor|proton|thermal|muon) ]] && TYPE="ballistic"
+    [[ $MACRO =~ (gatling|plasma|laser|charge|cannon|shotgun|ion|flak|sticky|arc|swarm|disruptor|proton|thermal|muon|blaster) ]] && TYPE="ballistic"
     [[ $MACRO =~ railgun ]] && TYPE="railgun"
     [[ $MACRO =~ (beam|mining|burst|nova|bio) ]] && TYPE="range_based"
     [[ $MACRO =~ ^engine_ ]] && TYPE="engine"
@@ -232,7 +232,7 @@ do
     }
 
     # Modifying stats depending on bullet, weapons or engine type
-    if [[ $TYPE == "ballistic" ]]; then #(gatling|plasma|laser|charge|cannon|shotgun|ion|flak|sticky|arc|swarm|disruptor|proton|thermal|muon)
+    if [[ $TYPE == "ballistic" ]]; then #(gatling|plasma|laser|charge|cannon|shotgun|ion|flak|sticky|arc|swarm|disruptor|proton|thermal|muon|blaster)
         SPEED=$(get_attr "speed")
         ANGLE=$(get_attr "angle")
         METRICS_LIFE=$(get_attr "lifetime")

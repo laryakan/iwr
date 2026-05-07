@@ -2,6 +2,6 @@
 <!-- Increased Weapon Ranges Generated  -->
 <diff>
   <replace sel="/macros/macro[@name='engine_missile_guided_mk1_macro']/properties/thrust">
-          <thrust forward="86.8305" reverse="0" strafe="5" pitch="158.285" yaw="158.285" roll="218.452" />
+          <thrust forward="86.8305" reverse="0.8" strafe="5" pitch="55" yaw="55" roll="75" />
   </replace>
 </diff>
