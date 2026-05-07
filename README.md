@@ -31,7 +31,7 @@ Concerning the generate script, where the most effort has been putted into, it h
 - 2 ("-vv") : all that preceed and it will output old range value vs new range value for each file
 - 3 ("-vvv") : it's a poke mode only used to debug the code inside the script and not actual value
 
-The script is able to mitigate your factor to balance weapon a bit more and avoir beam kitting forever.
+The script is able to mitigate your factor to balance weapon a bit more and avoid beam kitting forever.
 It's also able to detected over-valued ranges and under-valued angle. In fact, It can also apply a factor to ranges and another to angles.
 Have a weapons like a shotgun than can shoot far away with the same precision has a railgun isn't really the purpose of this script, but you can try it if you want.
 Anyway, the script will prompt you for everything it needs to generate files in a balanced way, that you can simply ignore and do your thing.
