@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <content id="ws_3487421450"
          name="Increased Weapon Ranges"
-         description="Increased Weapon Ranges - It simply increase your weapon ranges, updated for v9.0 (on the BETA version assets)"
+         description="Increased Weapon Ranges - It simply increase your weapon ranges, updated for v9.0 (release version)"
          author="Laryakan"
-         version="140"
-         date="2026-05-07"
+         version="141"
+         date="2026-06-12"
          save="false"
-         lastupdate="1778185128">
+         lastupdate="1781292420">
 </content>
