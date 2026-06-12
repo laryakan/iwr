@@ -14,7 +14,7 @@ calc() {
 }
 
 compare() {
-    echo "$1" | bc -l
+    echo "$1" | bc -l 2>/dev/null
 }
 
 DEBUG_MODE=0
@@ -173,6 +173,7 @@ do
     unset LOCK_RANGE
     unset MODIFIED_LINE
     unset MODIFIED_LOCK_LINE
+    unset WARNING_ANGLE
 
     if [[ $DEBUG_VERBOSE_MODE -eq 1 ]]; then
         echo -e "\n$Yellow => Starting Operating file:\n\t$FILE $Color_Off"
@@ -474,6 +475,9 @@ do
 
     # END LOGICAL CALCULATION
 done
+
+echo -e "\nConverting line endings to LF..."
+find "$SCRIPT_DIR/assets" "$SCRIPT_DIR/extensions" -type f -name "*.xml" -exec dos2unix {} \; > /dev/null 2>&1
 
 if [[ $DEBUG_MODE -eq 1 ]]; then
     echo -e "\n\nFor METRICS purpose and adjusting FACTOR mitigation, here are Vanilla RANGE metrics"

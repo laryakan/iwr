@@ -86,6 +86,23 @@ Their paths are (as for example in version 9.0 BETA) :
                         └── macros
 ```
 
+### Extracting Vanilla Files with extract_default.sh
+
+The `extract_default.sh` script automates the extraction of weapon and missile macros from a vanilla X4 installation. Place it at the root of an extracted X4 CAT archive and run it to populate the `_default` folder with all necessary vanilla assets.
+
+The script extracts:
+- All bullet macros from `assets/fx/weaponFx/macros/`
+- Engine missile macros from `assets/props/Engines/macros/`
+- All missiles from `assets/props/WeaponSystems/missile/macros/`
+- All official DLC extensions from `extensions/ego_dlc_*`
+
+**Usage:** Simply extract the X4 CAT files (see the Windows CMD commands at the top of the script), then run:
+```bash
+bash extract_default.sh
+```
+
+This populates the `_default` folder with all the vanilla files needed by the generator script.
+
 ## Requirements ?
 - None other than the game
 
