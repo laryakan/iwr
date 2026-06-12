@@ -16,6 +16,10 @@
 # for %f in ("F:\Games\X4 Foundations\extensions\ego_dlc_split\*.cat") do XRCatTool.exe -in "%f" -out "S:\users\paulw\downloads\x4\XTools_1.11\extracts\x4_9.0\extensions\ego_dlc_split" 
 # md "S:\users\paulw\downloads\x4\XTools_1.11\extracts\x4_9.0\extensions\ego_dlc_terran"
 # for %f in ("F:\Games\X4 Foundations\extensions\ego_dlc_terran\*.cat") do XRCatTool.exe -in "%f" -out "S:\users\paulw\downloads\x4\XTools_1.11\extracts\x4_9.0\extensions\ego_dlc_terran" 
+# md "S:\users\paulw\downloads\x4\XTools_1.11\extracts\x4_9.0\extensions\ego_dlc_mini_01"
+# for %f in ("F:\Games\X4 Foundations\extensions\ego_dlc_mini_01\*.cat") do XRCatTool.exe -in "%f" -out "S:\users\paulw\downloads\x4\XTools_1.11\extracts\x4_9.0\extensions\ego_dlc_mini_01"
+# md "S:\users\paulw\downloads\x4\XTools_1.11\extracts\x4_9.0\extensions\ego_dlc_mini_02"
+# for %f in ("F:\Games\X4 Foundations\extensions\ego_dlc_mini_02\*.cat") do XRCatTool.exe -in "%f" -out "S:\users\paulw\downloads\x4\XTools_1.11\extracts\x4_9.0\extensions\ego_dlc_mini_02"
 
 OUTPUT_DIR="_default"
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"

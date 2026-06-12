@@ -1,6 +1,6 @@
 # Increased Weapon Ranges - IWR
 This mod aim to increase weapon ranges (hancrafted/balanced values) for X4: Foundations.
-Only Vanilla Weapons are affected, incl. DLC (except Hyperion and Envoy which I don't have).
+Only Vanilla Weapons are affected, incl. DLC.
 It is provided with a generator script which can re-generate assets with the desired factor, angle and speed.
 
 ## What it does ?

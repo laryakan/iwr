@@ -194,8 +194,8 @@ do
     # Qualifying weapon projectile or engine type based on macro name
     TYPE=""
     [[ $MACRO =~ (gatling|plasma|laser|charge|cannon|shotgun|ion|flak|sticky|arc|swarm|disruptor|proton|thermal|muon|blaster) ]] && TYPE="ballistic"
-    [[ $MACRO =~ railgun ]] && TYPE="railgun"
-    [[ $MACRO =~ (beam|mining|burst|nova|bio) ]] && TYPE="range_based"
+    [[ $MACRO =~ (railgun|disabler) ]] && TYPE="railgun"
+    [[ $MACRO =~ (beam|mining|burst|nova|bio|shieldpierce) ]] && TYPE="range_based"
     [[ $MACRO =~ ^engine_ ]] && TYPE="engine"
     [[ $MACRO =~ ^missile_ ]] && TYPE="missile"
 
