@@ -20,7 +20,7 @@ I can  recommends you to use this mod with borther mods which increase space siz
 
 ### The ./generate.sh script (only available on Nexus and Github)
 The mod is delivered with a bash script (usable on linux or bash alternative like powershell on Windows) capable of applying rules on files located in "_default" folder. 
-You must extract macros from the game files since I removed em from my repository. You maybe can find them in some of my 7z in the release section, prior 1.3.0 (X4 7.60).
+You must extract macros from the game files since I removed em from my repository. You maybe can find them in some of my 7z in the release section (`vanilla_default_macros_*.7z` or in `iwr_tools.7z` post patch 9 release).
 It was bloating the repo. If you want a clean extract, you can use X TOOLS. The macro you're looking for are in CAT 07. As for the extensions, often in CAT ext_01.
 
 Simply run ./generate.sh and prompt will ask you if you want to reset to default files before applying the factor it will ask you at the next prompt.
@@ -88,7 +88,7 @@ Their paths are (as for example in version 9.0 BETA) :
 
 ### Extracting Vanilla Files with extract_default.sh
 
-The `extract_default.sh` script automates the extraction of weapon and missile macros from a vanilla X4 installation. Place it at the root of an extracted X4 CAT archive and run it to populate the `_default` folder with all necessary vanilla assets.
+The `extract_default.sh` script automates the extraction of weapon and missile macros from a vanilla X4 extraction. Place it at the root of an extracted X4 CAT archive and run it to populate the `_default` folder with all necessary vanilla assets. You can then cut/paste `_default` at the root of iwr local repo.
 
 The script extracts:
 - All bullet macros from `assets/fx/weaponFx/macros/`
